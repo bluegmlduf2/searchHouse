@@ -11,7 +11,7 @@ function App() {
     <Container fluid className="App">
       <Row className="nav p-2 text-center btn">
         <Col className="logo text-left" md={1}>
-          <img src="/logo2.png" width="45px" />
+          <img src="./logo2.png" width="45px" />
         </Col>
         <Col md={{ span: "2" }} className="">
           <Button variant="/home" size="lg">지도</Button>
