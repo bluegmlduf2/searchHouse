@@ -8,6 +8,14 @@ padding: 0px!important;
   background-color: transparent;
 }
 
+h3{
+  display: inline; 
+  font-family: 'Courier New', Courier, monospace ;
+  vertical-align: -5px!important;
+  padding-left: 10px!important;
+  color: #f24d7d;
+}
+
 .nav a{
   margin-left: 40px;
   font-size: 15px;

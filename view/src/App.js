@@ -10,8 +10,9 @@ function App() {
   return (
     <Container fluid className="App">
       <Row className="nav p-2 text-center btn">
-        <Col className="logo text-left" md={1}>
+        <Col className="logo" md={3}>
           <img src="./logo2.png" width="45px" />
+          <h3>이방저방</h3>
         </Col>
         <Col md={{ span: "2" }} className="">
           <Button variant="/home" size="lg">지도</Button>
@@ -22,7 +23,7 @@ function App() {
         <Col md={{ span: "2" }}>
           <Button variant="/home" size="lg">방내놓기</Button>
         </Col>
-        <Col md={{ span: "2" }}>
+        <Col md={3}>
           <Button variant="" className="btn_outline" size="lg">회원가입</Button>
           <Button variant="/home" className="btn_outline ml-3" size="lg">로그인</Button>
         </Col>
