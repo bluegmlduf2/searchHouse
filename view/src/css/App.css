@@ -8,26 +8,21 @@ padding: 0px!important;
   background-color: transparent;
 }
 
-h3{
+.logo h3{
   display: inline; 
   font-family: 'Courier New', Courier, monospace ;
   vertical-align: -5px!important;
   padding-left: 10px!important;
   color: #f24d7d;
+  font-weight: bold;
 }
 
-.nav a{
-  margin-left: 40px;
-  font-size: 15px;
-  line-height: 22px;
-  position: relative;
-  color: rgba(255, 255, 255, 0.8);
-  user-select: none;
-  font-weight: bold;
-  font-size: large;
+.nav button{
+  font-weight:700
 }
-.nav a:hover{
-  color: rgba(255, 255, 255, 0.8);
+
+.nav button:hover{
+  color: #f24d7d;
 }
 
 .logo{
