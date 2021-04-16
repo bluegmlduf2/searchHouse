@@ -17,28 +17,18 @@
     font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
+.roomList{
+    margin: 10px 0 80px;
+}
+
 .roomList_label{
 margin-top: 40px;
 }
-
-.roomList{
-    /* width: 100%; */
-    margin-top: 10px;
+.roomList .card{
+    transform: scale(1);
+    transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
+}
+.roomList .card:hover{
+    transform: scale(1.1);
 }
 
-.apartList{
-    /* width: 100%;
-    padding: 60px 0px 80px; */
-    background-color: rgb(60, 71, 103);
-    /* overflow: hidden; */
-}
-
-.guide{
-    /* width: 100%;
-    padding: 100px 0px 150px; */
-}
-
-.news{
-    /* width: 100%;
-    padding: 60px 0px;; */
-}

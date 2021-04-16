@@ -26,8 +26,8 @@ function App() {
           <Button variant="/home" size="lg">売る</Button>
         </Col>
         <Col md={3}>
-          <Button variant="" className="btn_outline" size="lg">회원가입</Button>
-          <Button variant="/home" className="btn_outline ml-3" size="lg">로그인</Button>
+          <Button variant="" className="btn_outline" size="lg">新規登録</Button>
+          <Button variant="/home" className="btn_outline ml-3" size="lg">ログイン</Button>
         </Col>
       </Row>
 
@@ -52,40 +52,36 @@ function App() {
 
       <Row className="roomList justify-content-md-center">
         <Col md="8">
-        <CardDeck>
-          {roomInfo.map((e, i) => {
-            return (
-              <Col md="3" className="">
-                <Card>
-                  <Card.Img variant="top" src="./cardImg.svg" />
-                  <Card.Body>
-                    <Card.Title>Card Title</Card.Title>
-                    <Card.Text>
-                      Some quick example text to build on the card title and make up the bulk of
-                      the card's content.
+          <CardDeck>
+            {roomInfo.map((e, i) => {
+              return (
+                <Col md="3" className="">
+                  <Card>
+                    <Card.Img variant="top" src="./cardImg.svg" />
+                    <Card.Body>
+                      <Card.Title>Card Title</Card.Title>
+                      <Card.Text>
+                        Some quick example text to build on the card title and make up the bulk of
+                        the card's content.
                     </Card.Text>
-                    <Button variant="primary">Go somewhere</Button>
-                  </Card.Body>
-                </Card>
-              </Col>
-            )
-          })}
-        </CardDeck>
+                      <Button variant="primary">Go somewhere</Button>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              )
+            })}
+          </CardDeck>
         </Col>
       </Row>
 
-      <div className="apartList">
+      <Row>
+        <Col>
+          <footer>
 
-      </div>
-      <div className="guide">
+          </footer>
+        </Col>
+      </Row>
 
-      </div>
-      <div className="news">
-
-      </div>
-      <footer>
-
-      </footer>
     </Container>
   );
 }
