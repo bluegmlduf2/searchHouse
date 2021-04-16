@@ -4,9 +4,9 @@ class Connection:
     def __init__(self):
         # (인스턴스)멤버변수등록
         self.db = pymysql.connect(host='localhost',
-                                  user='root',
-                                  password='fP[ssw0rd',
-                                  db='posDB',
+                                  user='',
+                                  password='',
+                                  db='',
                                   charset='utf8')
         #DB의 커서 선언
         self.cursor = self.db.cursor(pymysql.cursors.DictCursor)
