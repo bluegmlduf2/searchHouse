@@ -14,7 +14,7 @@ function App() {
       <Row className="nav p-2 text-center">
         <Col className="logo" md={3}>
           <img src="./logo2.png" width="45px" />
-          <h3>BANGMON</h3>
+          <h3>BANG</h3>
         </Col>
         <Col md={{ span: "2" }} className="">
           <Button variant="/home" size="lg">マップ</Button>
@@ -35,7 +35,7 @@ function App() {
         <Col md="8" >
           <Form>
             <Form.Row>
-              <Form.Group as={Col} controlId="formGridEmail">
+              <Form.Group as={Col} controlId="idSearchRoom">
                 <Form.Label className="label_white xl"><h2>どんな部屋をお探しですか？</h2></Form.Label>
                 <Form.Control type="text" className="h-100" placeholder="探す場所を入力して下さい。" />
               </Form.Group>

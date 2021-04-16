@@ -4,6 +4,7 @@
     /* margin-top: -85px; */
     background-image: linear-gradient(134deg, rgb(19, 183, 207) -5%, rgb(54, 91, 180) 56%, rgb(54, 91, 180) 56%);
 }
+
 .btn_outline{
     border: 2px solid rgba(128, 128, 128, 0.372)!important;
     border-radius: 2px;
