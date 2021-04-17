@@ -1,30 +1,34 @@
-
 .serach{
-    height: 465px;
-    /* margin-top: -85px; */
+    height: 765px;
+    margin-top: -280px;
     background-image: linear-gradient(134deg, rgb(19, 183, 207) -5%, rgb(54, 91, 180) 56%, rgb(54, 91, 180) 56%);
 }
 
-.btn_outline{
-    border: 2px solid rgba(128, 128, 128, 0.372)!important;
-    border-radius: 2px;
+.serach .div-centerPad{
+    padding-top: 14%;
 }
 
-.label_white{
+.serach .form-search{
+    margin: 0 20px;
+}
+
+.serach .label-white{
     color: white;
 }
-.lable_bold{
+
+.roomList{
+    margin: 60px 0 120px;
+}
+
+.roomList .label-title{
+    margin: 20px 0;
+}
+
+.roomList .label-bold{
     font-weight:900;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.roomList{
-    margin: 10px 0 80px;
-}
-
-.roomList_label{
-margin-top: 40px;
-}
 .roomList .card{
     transform: scale(1);
     transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/

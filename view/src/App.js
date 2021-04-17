@@ -12,11 +12,11 @@ function App() {
   return (
     <Container fluid className="App">
       <Row className="nav p-2 text-center">
-        <Col className="logo" md={3}>
+        <Col md={3}>
           <img src="./logo2.png" width="45px" />
-          <h3>BANG</h3>
+          <h3 className={"h3-logo"}> BANG</h3>
         </Col>
-        <Col md={{ span: "2" }} className="">
+        <Col md={{ span: "2" }}>
           <Button variant="/home" size="lg">マップ</Button>
         </Col>
         <Col md={{ span: "2" }}>
@@ -25,18 +25,18 @@ function App() {
         <Col md={{ span: "2" }}>
           <Button variant="/home" size="lg">売る</Button>
         </Col>
-        <Col md={3}>
-          <Button variant="" className="btn_outline" size="lg">新規登録</Button>
-          <Button variant="/home" className="btn_outline ml-3" size="lg">ログイン</Button>
+        <Col md={3} className="">
+          <Button variant="" className="btn-outline" size="lg">新規登録</Button>
+          <Button variant="/home" className="btn-outline ml-3" size="lg">ログイン</Button>
         </Col>
       </Row>
 
       <Row className="serach justify-content-md-center align-items-center">
-        <Col md="8" >
-          <Form>
+        <Col md="8"className="div-centerPad" >
+          <Form className="form-search">
             <Form.Row>
               <Form.Group as={Col} controlId="idSearchRoom">
-                <Form.Label className="label_white xl"><h2>どんな部屋をお探しですか？</h2></Form.Label>
+                <Form.Label className="label-white xl"><h2>どんな部屋をお探しですか？</h2></Form.Label>
                 <Form.Control type="text" className="h-100" placeholder="探す場所を入力して下さい。" />
               </Form.Group>
             </Form.Row>
@@ -44,13 +44,10 @@ function App() {
         </Col>
       </Row>
 
-      <Row className="roomList_label justify-content-md-center">
-        <Col md="8">
-          <h2><span className={"lable_bold"}>おすすめ</span><span>の部屋</span></h2>
-        </Col>
-      </Row>
-
       <Row className="roomList justify-content-md-center">
+        <Col md="8" className={"label-title"}>
+          <h2><span className={"label-bold"}>おすすめ</span><span>の部屋</span></h2>
+        </Col>
         <Col md="8">
           <CardDeck>
             {roomInfo.map((e, i) => {

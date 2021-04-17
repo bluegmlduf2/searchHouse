@@ -1,33 +1,36 @@
+/* CSS 네이밍 표준 : (조상) 형태-의미-순서_상태  btn-cancle-01_off */
+
 .App{
-padding: 0px!important;
+  padding: 0px!important;
 }
 
 .nav{
-  /* padding: 20px 20px 0px 30px; */
   border-bottom: 1px solid transparent;
   background-color: transparent;
 }
 
-.logo h3{
+.nav .h3-logo{
   display: inline; 
   font-family: 'Courier New', Courier, monospace ;
-  vertical-align: -5px!important;
-  padding-left: 10px!important;
+  margin-left: -10px;
   color: #f24d7d;
   font-weight: bold;
 }
 
 .nav button{
-  font-weight:700
+  color: white;
+  font-weight:500;
+  font-size:x-large;
+  transition: all 0.2s ease-in-out;   /* 부드러운 모션을 위해 추가*/
 }
-
 .nav button:hover{
   color: #f24d7d;
+  z-index: 1;
 }
 
-.logo{
-margin-right: auto;
-padding-left: 20px;
+.nav .btn-outline{
+  border: 2px solid rgba(255, 255, 255, 0.372)!important;
+  border-radius: 2px;
 }
 
 footer{
