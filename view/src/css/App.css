@@ -4,12 +4,17 @@
   padding: 0px!important;
 }
 
-.nav{
+.navi{
   border-bottom: 1px solid transparent;
   background-color: transparent;
+  margin-top: 15px;
 }
 
-.nav .h3-logo{
+.navi .div-logo{
+  padding-top: 10px;
+}
+
+.navi .h3-logo{
   display: inline; 
   font-family: 'Courier New', Courier, monospace ;
   margin-left: -10px;
@@ -17,24 +22,44 @@
   font-weight: bold;
 }
 
-.nav button{
-  color: white;
-  font-weight:500;
+.navi button{
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 5px;
+  font-weight:600;
   font-size:x-large;
   transition: all 0.2s ease-in-out;   /* 부드러운 모션을 위해 추가*/
 }
-.nav button:hover{
+.navi button:hover{
   color: #f24d7d;
-  z-index: 1;
 }
 
-.nav .btn-outline{
+.navi .btn-outline{
   border: 2px solid rgba(255, 255, 255, 0.372)!important;
   border-radius: 2px;
 }
 
-footer{
+.footer{
   /* width: 100%; */
   height: 250px;
-  background-color: rgb(55, 55, 55)!important;
+  background-color: rgb(55, 55, 55);
+  color: rgb(160, 160, 160);
+}
+
+.footer .btn-footer{
+  margin: 20px 0 10px;
+}
+.footer .btn-footer button{
+  font-size: large;
+  margin-left: 20px;
+}
+.footer .txt-footer{
+  height: 150px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  /*여러줄일경우 각 줄높이*/
+  line-height: 1.4;
+  text-align: left; 
+  display: -webkit-box; 
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
 }
