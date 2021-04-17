@@ -5,6 +5,7 @@ import './css/App.css';
 import './css/_reset.css';
 import './css/content.css';
 import './css/bootstrap.min.css'
+import { Route, Link, Switch } from 'react-router-dom' /* 라우터 초기 설정 */
 
 function App() {
   let [roomInfo, roomUpd] = useState([1, 4, 5, 6])
@@ -17,17 +18,17 @@ function App() {
           <h3 className={"h3-logo"}> BANG</h3>
         </Col>
         <Col md="2">
-          <Button variant="/home">マップ</Button>
+          <Link to="/map" className="btn">マップ</Link>
         </Col>
         <Col md="2">
-          <Button variant="/home">お気に入り</Button>
+          <Link to="/like" className="btn">お気に入り</Link>
         </Col>
         <Col md="2">
-          <Button variant="/home">売る</Button>
+          <Link to="/sale" className="btn">売る</Link>
         </Col>
         <Col md="3" className="">
-          <Button variant="" className="btn-outline" size="lg">新規登録</Button>
-          <Button variant="/home" className="btn-outline ml-3" size="lg">ログイン</Button>
+          <Link to="/login" className="btn btn-outline" size="lg">新規登録</Link>
+          <Link to="/signup" className="btn btn-outline ml-3" size="lg">ログイン</Link>
         </Col>
       </Row>
 
@@ -56,6 +57,7 @@ function App() {
             {roomInfo.map((e, i) => {
               return (
                 <Col md="3" className="mb-4">
+                  <Link to="#">
                   <Card>
                     <Card.Img variant="top" src="./cardImg.svg" width="286px" height="220px"/>
                     <Card.Body>
@@ -70,6 +72,7 @@ function App() {
                       </Card.Text>
                     </Card.Body>
                   </Card>
+                  </Link>
                 </Col>
               )
             })}
@@ -79,9 +82,9 @@ function App() {
 
       <Row className="footer justify-content-md-center">
         <Col md="8" className="btn-footer">
-            <Button variant="secondary">会社概要</Button>
-            <Button variant="secondary">Contact us</Button>
-            <Button variant="secondary">個人情報管理</Button>
+            <Link to="/company" className="btn btn-secondary">会社概要</Link>
+            <Link to="/contact" className="btn btn-secondary">Contact Us</Link>
+            <Link to="/info" className="btn btn-secondary">個人情報管理</Link>
         </Col>
         <Col md="8" className="txt-footer">
           <Row>
@@ -93,6 +96,36 @@ function App() {
 
     </Container>
   );
+
+  function LoginForm(){
+    return (
+      <form>
+        <h3>Log in</h3>
+
+        <div className="form-group">
+            <label>Email</label>
+            <input type="email" className="form-control" placeholder="Enter email" />
+        </div>
+
+        <div className="form-group">
+            <label>Password</label>
+            <input type="password" className="form-control" placeholder="Enter password" />
+        </div>
+
+        <div className="form-group">
+            <div className="custom-control custom-checkbox">
+                <input type="checkbox" className="custom-control-input" id="customCheck1" />
+                <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
+            </div>
+        </div>
+
+        <button type="submit" className="btn btn-dark btn-lg btn-block">Sign in</button>
+        <p className="forgot-password text-right">
+            Forgot <a href="#">password?</a>
+        </p>
+    </form>
+    );
+  }
 }
 
 export default App;
