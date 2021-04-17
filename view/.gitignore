@@ -13,6 +13,6 @@ psd
 thumb
 sketch
 
-database.py
+build/*
 
 # End of https://www.toptal.com/developers/gitignore/api/flask,react
