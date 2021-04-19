@@ -63,3 +63,12 @@
   -webkit-line-clamp: 7;
   -webkit-box-orient: vertical;
 }
+
+@media(max-width:375px) {
+  .footer .btn-footer{
+    display: none;
+  }
+  .footer .txt-footer{
+    margin-top: 25px;
+  }
+}
