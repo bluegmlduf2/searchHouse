@@ -9,7 +9,8 @@ import './css/main/main.css';
 import Nav from "./components/common/Nav.js";
 import Footer from "./components/common/Footer.js";
 import Main from "./components/main/Main.js";
-import LoginForm from "./components/common/LoginForm.js";
+import SignIn from "./components/common/SignIn.js";
+import SignUp from "./components/common/SignUp.js";
 
 
 function App() {
@@ -19,7 +20,8 @@ function App() {
       <Route path="/" component={Nav}/>
 
       <Switch>
-        <Route path="/signup" component={LoginForm}/>
+        <Route path="/signin" component={SignIn}/>
+        <Route path="/signup" component={SignUp}/>
         <Route path="/" component={Main}/>
       </Switch>
 

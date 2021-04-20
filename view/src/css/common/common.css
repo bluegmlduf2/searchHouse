@@ -77,3 +77,11 @@
     margin-top: 25px;
   }
 }
+
+.div-outline{
+  margin: 150px auto;
+  padding: 30px ;
+  border:1px solid rgb(160, 160, 160);
+  border-radius: 5px;
+  box-shadow: 0 0 3px 1px rgb(160, 160, 160);/* 그림자위치 상하,좌우,흐려짐정도,그림자크기,색상 */
+}
