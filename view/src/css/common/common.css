@@ -29,6 +29,11 @@
   font-size:x-large;
   transition: all 0.2s ease-in-out;   /* 부드러운 모션을 위해 추가*/
 }
+
+.navi .a-fontBlack{
+  color: black;
+}
+
 .navi a:hover{
   color: #f24d7d;
 }
