@@ -9,16 +9,16 @@ function LoginForm() {
                 <div className="div-outline">
                     <Form action="">
 
-                        <h3>Log in</h3>
+                        <h3>ログイン</h3>
 
                         <div className="form-group">
                             <label>Email</label>
-                            <input type="email" className="form-control" placeholder="Enter email" />
+                            <input type="email" className="form-control" placeholder="メールアドバイスを入力してください。" />
                         </div>
 
                         <div className="form-group">
                             <label>Password</label>
-                            <input type="password" className="form-control" placeholder="Enter password" />
+                            <input type="password" className="form-control" placeholder="パスワードを入力してください。" />
                         </div>
 
                         <div className="form-group">
@@ -28,7 +28,7 @@ function LoginForm() {
                             </div>
                         </div>
 
-                        <button type="submit" className="btn btn-dark btn-lg btn-block">Sign in</button>
+                        <button type="submit" className="btn btn-dark btn-lg btn-block">ログイン</button>
                         <p className="forgot-password text-right">
                             Forgot <a href="#">password?</a>
                         </p>

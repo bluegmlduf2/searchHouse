@@ -1,0 +1,18 @@
+.filter{
+    height: 60px;
+    border-bottom: 1px solid rgb(231, 231, 231);
+}
+
+.filter .col-3{
+    height: 60px;
+    border-right: 1px solid rgb(231, 231, 231);
+}
+
+
+.mapCont{
+    height: 600px;
+}
+.mapCont .col-3{
+    height: 600px;
+    border-right: 1px solid rgb(231, 231, 231);
+}

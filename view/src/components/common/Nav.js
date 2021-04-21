@@ -4,10 +4,11 @@ import {Row,Col} from 'react-bootstrap'; // npm install react-bootstrap bootstra
 import { Route, Link, Switch ,useLocation} from 'react-router-dom' /* 라우터 초기 설정 */
 
 function Nav(){
-    const navFont=(useLocation().pathname.length>1 ? 'a-fontBlack' : null)
+    const navFont=(useLocation().pathname.length>1 ? 'a-fontBlack ' : null)
+    const navLine=(useLocation().pathname.length>1 ? 'div-bottomLine ' : null)
 
     return(
-        <Row className={"navi p-2 text-center "+navFont}>
+        <Row className={"navi text-center "+navFont+navLine}>
             <Col md="3" className="div-logo">
                 <Link to="/">
                     <img src="./logo2.png" width="45px" />
