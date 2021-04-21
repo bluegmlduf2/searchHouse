@@ -60,6 +60,7 @@
     transform: scale(1);
     transition: all 0.3s ease-in-out;   /* 부드러운 모션을 위해 추가*/
     border:none;
+    color: black;
 }
 
 .roomList .card-text{

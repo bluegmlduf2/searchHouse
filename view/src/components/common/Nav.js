@@ -9,8 +9,10 @@ function Nav(){
     return(
         <Row className={"navi p-2 text-center "+navFont}>
             <Col md="3" className="div-logo">
-                <img src="./logo2.png" width="45px" />
-                <h3 className={"h3-logo"}> BANG</h3>
+                <Link to="/">
+                    <img src="./logo2.png" width="45px" />
+                    <h3 className={"h3-logo"}> BANG</h3>
+                </Link>
             </Col>
             <Col md="2">
                 <Link to="/map" className={"btn "+navFont}>マップ</Link>

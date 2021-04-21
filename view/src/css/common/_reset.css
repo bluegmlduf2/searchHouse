@@ -65,7 +65,7 @@ a {
     font-size:100%;
     vertical-align:baseline;
     background:transparent;
-    text-decoration: none;/*a태그 밑줄제거*/
+    text-decoration: none!important;/*a태그 밑줄제거 :bootstrap 중복때문에 important*/
 }
 
 /* change colours to suit your needs */
