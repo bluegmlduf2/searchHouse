@@ -1,17 +1,51 @@
 .filter{
     padding-top: 15px;
+    padding: 15px 10px 0 ;
     border-bottom: 1px solid rgb(231, 231, 231);
 }
 
-.filter .col-md-3{
-    /* height: 60px; */
-    /* border-right: 1px solid rgb(231, 231, 231); */
-}
 
+.filter .dropdown-toggle{
+    background-color: #fff;
+    border:1px solid #ced4da;
+}
 
 .mapCont{
-    height: 600px;
+    height: 700px;
 }
-.mapCont .col-3{
+
+.mapCont .card{
+    border: none;
+    color: black;
+}
+
+.mapCont .card-text{
+    color: rgb(101, 101, 101);
+}
+
+.mapCont .col-md-3{
+    overflow: auto;
+    height: 700px;
     border-right: 1px solid rgb(231, 231, 231);
 }
+.mapCont .col-md-3 .pagination{
+    margin-top: 20px;
+}
+
+.mapCont .col-md-5{
+    padding: 10px 0 0 20px;
+}
+
+@media(max-width:375px) {
+    .mapCont .col-md-3{
+        border: none;
+    }
+    
+    .mapCont .col-md-9{
+      display: none;
+    }
+    .footer{
+        display: none;
+    }
+  }
+  

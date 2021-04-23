@@ -9311,6 +9311,14 @@
     "regenerator-runtime" "^0.13.7"
     "whatwg-fetch" "^3.4.1"
 
+"react-bootstrap-range-slider@^2.0.2":
+  "integrity" "sha512-GptOpQjarlf6H2OfGsAqS1jOFFw8lsfQVLCWD6tgILspr2qZxzoiyUGLPDNfFFLy/ALhzGxlnVUrYjOe34UkhA=="
+  "resolved" "https://registry.npmjs.org/react-bootstrap-range-slider/-/react-bootstrap-range-slider-2.0.2.tgz"
+  "version" "2.0.2"
+  dependencies:
+    "classnames" "^2.2.6"
+    "prop-types" "^15.7.2"
+
 "react-bootstrap@^1.5.2":
   "integrity" "sha512-mGKPY5+lLd7Vtkx2VFivoRkPT4xAHazuFfIhJLTEgHlDfIUSePn7qrmpZe5gXH9zvHV0RsBaQ9cLfXjxnZrOpA=="
   "resolved" "https://registry.npmjs.org/react-bootstrap/-/react-bootstrap-1.5.2.tgz"
