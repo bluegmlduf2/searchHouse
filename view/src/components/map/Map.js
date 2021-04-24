@@ -1,9 +1,12 @@
 /*eslint-disable*/
-import react, { useState } from 'react';
+import react, { useState } from 'react';//export Default된 항목은 {}없이 받음
 import { Row, Col, InputGroup, FormControl, Card, Form, Pagination } from 'react-bootstrap'; // npm install react-bootstrap bootstrap
 import { Link } from 'react-router-dom' /* 라우터 초기 설정 */
 import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import RangeSlider from 'react-bootstrap-range-slider';
+import GoogleMapReact from 'google-map-react';
+import {keys} from '../../key.js'
+
 
 function Main() {
     let [roomInfo, roomUpd] = useState([1, 4, 5, 6])
@@ -29,6 +32,14 @@ function Main() {
             </Pagination.Item>
         );
     }
+
+    let [locationInfo,locationUpd]=useState({
+        center: {
+          lat: 59.95,
+          lng: 30.33
+        },
+        zoom: 11
+      })
 
 
     return (
@@ -63,10 +74,10 @@ function Main() {
 
                                 <Col md="3">
                                     <Form.Group as={Row} controlId="formPlaintextEmail">
-                                        <Form.Label column sm="2" className="text-center">
+                                        <Form.Label column sm="3" className="text-center">
                                             <h5>賃料</h5>
                                         </Form.Label>
-                                        <Col sm="10">
+                                        <Col sm="9">
                                             <RangeSlider val="50" min='10' max="101" step="1" tooltip="off" />
                                         </Col>
                                     </Form.Group>
@@ -74,7 +85,7 @@ function Main() {
 
                                 <Col md="4">
                                     <Form.Group as={Row} controlId="formPlaintextPassword">
-                                        <Form.Label column sm="3" className="text-center"size="l">
+                                        <Form.Label column sm="3" className="text-center" size="l">
                                             <h5>賃料上限</h5>
                                         </Form.Label>
                                         <Col sm="5">
@@ -96,9 +107,9 @@ function Main() {
                                 return (
                                     <Link to="#">
                                         <Card>
-                                            <Row className="mb-2">
+                                            <Row className="mb-2 ">
                                                 <Col md="5">
-                                                    <Card.Img variant="top" src="./cardImg.svg" width="100%" height="100%" />
+                                                    <Card.Img variant="top" src="./cardImg.svg" width="100%" height="80%" />
                                                 </Col>
                                                 <Col md="7">
                                                     <Card.Body>
@@ -128,7 +139,14 @@ function Main() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md="9">22222222</Col>
+                        <Col md="9">
+                            <GoogleMapReact
+                                bootstrapURLKeys={{ key: keys.googleKey }}
+                                defaultCenter={locationInfo.center}
+                                defaultZoom={locationInfo.zoom}
+                            >
+                            </GoogleMapReact>
+                        </Col>
                     </Row>
                 </Col>
             </Row>
