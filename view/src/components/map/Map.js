@@ -32,12 +32,9 @@ function Main() {
             </Pagination.Item>
         );
     }
-
+    
     let [locationInfo,locationUpd]=useState({
-        center: {
-          lat: 59.95,
-          lng: 30.33
-        },
+        center: tokyo,
         zoom: 11
       })
 
