@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom' /* 라우터 초기 설정 */
 import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import RangeSlider from 'react-bootstrap-range-slider';
 import GoogleMapReact from 'google-map-react';
-import {keys} from '../../key.js'
+import { keys } from '../../key.js'
 
 
 function Main() {
@@ -32,11 +32,11 @@ function Main() {
             </Pagination.Item>
         );
     }
-    
-    let [locationInfo,locationUpd]=useState({
-        center: tokyo,
+
+    let [locationInfo, locationUpd] = useState({
+        center:{ lat: 35.681167, lng: 139.767052 },
         zoom: 11
-      })
+    })
 
 
     return (
