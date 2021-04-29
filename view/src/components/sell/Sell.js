@@ -149,7 +149,7 @@ function Main() {
                             </div>
                         </Col>
                     </Row>
-                    <Button variant="secondary" style={{margin:"20px 10px"}} type="submit" size="lg" block>登録</Button>
+                    <Button variant="secondary" style={{margin:"20px 0"}} type="submit" size="lg" block>登録</Button>
                 </Col>
             </Row>
         </Form>
