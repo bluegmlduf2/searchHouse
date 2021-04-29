@@ -7,6 +7,7 @@ import './css/common/common.css';
 import './css/lib/bootstrap.min.css'
 import './css/main/main.css';
 import './css/map/map.css';
+import './css/sell/sell.css';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import './css/lib/react-bootstrap-range-slider.css';

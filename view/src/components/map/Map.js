@@ -20,7 +20,7 @@ function Main() {
         { key: "8", label: "2LDK" },
     ];
 
-    let [roomDetailInfo, roomDetailUpd] = useState([1, 4, 5, 6])
+    let [roomDetailInfo, roomDetailUpd] = useState([1, 2, 3, 4, 5, 6])
 
 
     let active = 2;
@@ -34,7 +34,7 @@ function Main() {
     }
 
     let [locationInfo, locationUpd] = useState({
-        center:{ lat: 35.681167, lng: 139.767052 },
+        center: { lat: 35.681167, lng: 139.767052 },
         zoom: 11
     })
 
@@ -104,7 +104,7 @@ function Main() {
                                 return (
                                     <Link to="#">
                                         <Card>
-                                            <Row className="mb-2 ">
+                                            <Row>
                                                 <Col md="5">
                                                     <Card.Img variant="top" src="./cardImg.svg" width="100%" height="80%" />
                                                 </Col>
@@ -128,7 +128,7 @@ function Main() {
                             })}
                             <Row className="pagenation">
                                 <Col>
-                                    <Pagination size="lg" className=" justify-content-center">
+                                    <Pagination className=" justify-content-center">
                                         <Pagination.Prev />
                                         {items}
                                         <Pagination.Next />

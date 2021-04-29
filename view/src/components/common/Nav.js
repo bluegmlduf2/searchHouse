@@ -22,7 +22,7 @@ function Nav(){
                 <Link to="/like" className={"btn "+navFont}>お気に入り</Link>
             </Col>
             <Col md="2">
-                <Link to="/sale" className={"btn "+navFont}>売る</Link>
+                <Link to="/sell" className={"btn "+navFont}>売る</Link>
             </Col>
             <Col md="3" className="">
                 <Link to="/signup" className={"btn btn-outline "+navFont} size="lg">新規登録</Link>
