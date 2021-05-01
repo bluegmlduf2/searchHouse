@@ -1,5 +1,44 @@
-.sell .row{
+.sell{
+    margin-top: 20px;
+}
+.sell form .row{
     padding-top: 15px;
     padding: 15px 10px 0 ;
     /* border-bottom: 1px solid rgb(231, 231, 231); */
 }
+.sell h4{
+    padding: 20px 20px 0;    
+}
+.sellNotice{
+    border:1px solid #ced4da;
+    /* margin-top: 20px; */
+    padding: 15px;
+    border-radius: 5px;
+    font-size: large;
+}
+
+.sellRoom{
+    word-break: break-all;
+    border-radius: 5px;
+    margin: 20px 0 30px;
+    height: 180px;
+}
+.sellRoom > div{
+    overflow: hidden;
+    border:0.5px solid #ced4da;   
+    border-collapse:collapse;
+    height: 180px;
+    line-height: 90px;
+    padding: 0px 40px;
+}
+
+.sellRoom .btn-center{
+    justify-content: center;
+}
+
+@media(max-width:767px) {
+    .footer{
+        display: none;
+    }
+  }
+  

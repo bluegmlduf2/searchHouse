@@ -52,7 +52,6 @@ function Main() {
                         </Col>
                         <Col md="9">
                             <Row>
-
                                 <Col md="2">
                                     <Form.Group controlId="exampleForm.SelectCustom">
                                         <Form.Control as="select" custom>
