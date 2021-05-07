@@ -29,7 +29,7 @@ def create_app(config_mode="test"):
     app.register_blueprint(pay.pay_ab, url_prefix='/pay')
     app.register_blueprint(resv.resv_ab, url_prefix='/resv')
     app.register_blueprint(chart.chart_ab, url_prefix='/chart')
-    app.register_blueprint(signup.signup_ab, url_prefix='/signup')
+    app.register_blueprint(signup.signup_ab, url_prefix='/signup-data')
 
     return app
 
