@@ -1,5 +1,9 @@
 from flask import Blueprint, render_template,request
 from model import signup
+from email.mime.text import MIMEText#메일제목본문설정모듈
+import smtplib#메일모듈
+import random
+import configparser#환경설정파일parser
 
 # 라우팅 기본경로 table을 가지는 블루프린터 객체를 생성
 signup_ab = Blueprint('signup_ab', __name__)
@@ -8,12 +12,32 @@ signup_ab = Blueprint('signup_ab', __name__)
 # 이 경우 /table/index 가 된다
 @signup_ab.route('/register',methods=['PUT'])
 def register():
-    '''회원정보등록'''
+    '''회원등록'''
     if request.method == 'PUT':
-        return signup.getTable()
+        args=request.get_json()
+        return pay.insertPay(args)
+
+@signup_ab.route('/sendMail' ,methods=['POST'])
+def sendMail():
+    '''회원가입확인메일'''
+    if request.method == 'POST':
+        #이메일환경설정파일읽어옴
+        config = configparser.ConfigParser()
+        config.read('./server/key.ini')
+        secret_key = config['DEFAULT']['EMAIL_APP_KEY']
+        
+        #이메일전송
+        verNum=str(random.randint(1,999999)).rjust(6,"0")#난수6자리,공백은0으로채움
+        s = smtplib.SMTP('smtp.gmail.com', 587)#구글이메일세션연결,지메일587포트번호
+        s.starttls()#TLS 보안 시작
+        s.login('bluegmlduf2@gmail.com', secret_key)#IMAP사용설정필요
+        msg = MIMEText(f'認証コードです : {verNum}')
+        msg['Subject'] = 'BANGからの認証コードです。'
+        s.sendmail("bluegmlduf2@gmail.com", "bluegmlduf2@naver.com", msg.as_string())
+        s.quit()# 세션 종료
+        return 'Sent'#나중에 성공 실패여부 보내야함
 
 @signup_ab.route('/info' ,methods=['GET','POST', 'PUT', 'DELETE'])
 def info():
     if request.method == 'POST':
-        '''테이블리스트 가져오기'''
         return signup.getTable()
