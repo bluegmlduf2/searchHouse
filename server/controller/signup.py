@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template,request
+from flask import Blueprint, render_template,request,session
 from model import signup
 from email.mime.text import MIMEText#메일제목본문설정모듈
 import smtplib#메일모듈
 import random
 import configparser#환경설정파일parser
+from datetime import timedelta
 
 # 라우팅 기본경로 table을 가지는 블루프린터 객체를 생성
 signup_ab = Blueprint('signup_ab', __name__)
@@ -15,6 +16,12 @@ def register():
     '''회원등록'''
     if request.method == 'PUT':
         args=request.get_json()
+        print(session['emailKey'])
+        if args['emailKey'] is session['emailKey']:
+            print(True)
+        else:
+            print(False)
+
         return pay.insertPay(args)
 
 @signup_ab.route('/sendMail' ,methods=['POST'])
@@ -34,7 +41,13 @@ def sendMail():
         msg = MIMEText(f'認証コードです : {verNum}')
         msg['Subject'] = 'BANGからの認証コードです。'
         s.sendmail("bluegmlduf2@gmail.com", "bluegmlduf2@naver.com", msg.as_string())
-        s.quit()# 세션 종료
+        s.quit()# 메일 세션 종료
+
+        #인증번호 세션 저장
+        session.permanent = True
+        app.permanent_session_lifetime = timedelta(minutes=3)#세션유지 최대 시간 3분
+        session['emailKey']=verNum
+
         return 'Sent'#나중에 성공 실패여부 보내야함
 
 @signup_ab.route('/info' ,methods=['GET','POST', 'PUT', 'DELETE'])

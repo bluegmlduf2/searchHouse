@@ -1,7 +1,7 @@
 '''
 Flask설정
 '''
-from flask import Flask, render_template, request, redirect, url_for, Blueprint
+from flask import Flask, render_template, request, redirect, url_for, Blueprint,session
 import traceback
 from controller import table 
 from controller import order 
@@ -10,6 +10,7 @@ from controller import resv
 from controller import chart
 from controller import signup
 from flask_cors import CORS
+
 
 dict_confmode = {
     'test': 'setting.TestMode',
@@ -24,10 +25,14 @@ def create_app(config_mode="test"):
     confmode = dict_confmode[config_mode]
     app.config.from_object(confmode)#매개변수:경로와 파일의 클래스명
 
-    CORS(app,resources={r'*': {'origins': ['http://localhost:3000','http://34.82.122.40/']}})
+    CORS(app,resources={r'*': {'origins': ['http://127.0.0.1:3000','http://34.82.122.40/']}})
     # API server ,View server 같은 도메인에서 사용할때 발생하는 에러 방지
     # Same Origin / Cross Origin Policy 에러처리 .. origin이란 웹이 각 리소스를 받아오는 곳의 url
     # http://localhost:3000 = react view서버의 요청을 허락한다
+
+    #세션설정
+    # session.permanent = True
+    # app.permanent_session_lifetime = timedelta(minutes=3)#세션유지 최대 시간 3분
 
     #매개변수로 bluePrint객체를 받는다. 그러나 import해서 해당 컨트롤러에 blueprint객체를 가져와서 사용
     app.register_blueprint(table.table_ab, url_prefix='/table')
