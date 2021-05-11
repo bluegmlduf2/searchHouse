@@ -53,14 +53,18 @@ function LoginForm() {
 
 
 function sendMail(params) {
-    axios.post('http://127.0.0.1:5000/signup-data/sendMail', { email : 'test'})
-    .then((result)=>{  })
+    axios.post('http://localhost:5000/signup-data/sendMail', { email : 'test'})
+    .then((result)=>{  
+        debugger
+    })
     .catch(()=>{ })
 }
 
-function register(params) {
+function register(e) {
+    e.preventDefault()
+
     const option={
-        url: 'http://127.0.0.1:5000/signup-data/register',
+        url: 'http://localhost:5000/signup-data/register',
         method: 'PUT',
         data: {
             a: 10,
