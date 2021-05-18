@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template,request,session
+from flask import Blueprint,request,session,current_app
 from model import signup
 from email.mime.text import MIMEText#메일제목본문설정모듈
 import smtplib#메일모듈
@@ -45,7 +45,7 @@ def sendMail():
 
         #인증번호 세션 저장
         session.permanent = True
-        # app.permanent_session_lifetime = timedelta(minutes=3)#세션유지 최대 시간 3분
+        current_app.permanent_session_lifetime = timedelta(minutes=3)#세션유지 최대 시간 3분
         session['emailKey']=verNum
 
         return 'Sent'#나중에 성공 실패여부 보내야함

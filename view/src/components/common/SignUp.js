@@ -53,6 +53,7 @@ function LoginForm() {
 
 
 function sendMail(params) {
+    //withCredentials:true =자격을 허락한다. 즉 쿠키,세션등과같은 값을 허락한다(쿠기,세션필수)
     axios.post('http://localhost:5000/signup-data/sendMail', { email : 'test'},{withCredentials: true })
     .then((result)=>{  
         debugger
