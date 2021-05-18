@@ -25,7 +25,7 @@ def create_app(config_mode="test"):
     confmode = dict_confmode[config_mode]
     app.config.from_object(confmode)#매개변수:경로와 파일의 클래스명
 
-    CORS(app,resources={r'*': {'origins': ['http://127.0.0.1:3000','http://34.82.122.40/']}})
+    CORS(app,resources={r'*': {'origins': ['http://127.0.0.1:3000','http://localhost:3000','http://34.82.122.40/']}},supports_credentials=True)
     # API server ,View server 같은 도메인에서 사용할때 발생하는 에러 방지
     # Same Origin / Cross Origin Policy 에러처리 .. origin이란 웹이 각 리소스를 받아오는 곳의 url
     # http://localhost:3000 = react view서버의 요청을 허락한다

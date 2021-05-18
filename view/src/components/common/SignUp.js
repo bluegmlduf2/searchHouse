@@ -53,7 +53,7 @@ function LoginForm() {
 
 
 function sendMail(params) {
-    axios.post('http://localhost:5000/signup-data/sendMail', { email : 'test'})
+    axios.post('http://localhost:5000/signup-data/sendMail', { email : 'test'},{withCredentials: true })
     .then((result)=>{  
         debugger
     })
@@ -69,12 +69,12 @@ function register(e) {
         data: {
             a: 10,
             b: 20
-  }
+        },withCredentials: true 
     }
+    
     axios(option)
-    .then((result)=>{ debugger})
+    .then((result)=>{ })
     .catch(()=>{ })
-
 }
 
 export default LoginForm

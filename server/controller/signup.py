@@ -16,13 +16,13 @@ def register():
     '''회원등록'''
     if request.method == 'PUT':
         args=request.get_json()
-        print(session['emailKey'])
-        if args['emailKey'] is session['emailKey']:
-            print(True)
-        else:
-            print(False)
+        # print(session['emailKey'])
+        # if args['emailKey']:
+        #     print(True)
+        # else:
+        #     print(False)
 
-        return pay.insertPay(args)
+        return 'ok'
 
 @signup_ab.route('/sendMail' ,methods=['POST'])
 def sendMail():
@@ -35,17 +35,17 @@ def sendMail():
         
         #이메일전송
         verNum=str(random.randint(1,999999)).rjust(6,"0")#난수6자리,공백은0으로채움
-        s = smtplib.SMTP('smtp.gmail.com', 587)#구글이메일세션연결,지메일587포트번호
-        s.starttls()#TLS 보안 시작
-        s.login('bluegmlduf2@gmail.com', secret_key)#IMAP사용설정필요
-        msg = MIMEText(f'認証コードです : {verNum}')
-        msg['Subject'] = 'BANGからの認証コードです。'
-        s.sendmail("bluegmlduf2@gmail.com", "bluegmlduf2@naver.com", msg.as_string())
-        s.quit()# 메일 세션 종료
+        # s = smtplib.SMTP('smtp.gmail.com', 587)#구글이메일세션연결,지메일587포트번호
+        # s.starttls()#TLS 보안 시작
+        # s.login('bluegmlduf2@gmail.com', secret_key)#IMAP사용설정필요
+        # msg = MIMEText(f'認証コードです : {verNum}')
+        # msg['Subject'] = 'BANGからの認証コードです。'
+        # s.sendmail("bluegmlduf2@gmail.com", "bluegmlduf2@naver.com", msg.as_string())
+        # s.quit()# 메일 세션 종료
 
         #인증번호 세션 저장
         session.permanent = True
-        app.permanent_session_lifetime = timedelta(minutes=3)#세션유지 최대 시간 3분
+        # app.permanent_session_lifetime = timedelta(minutes=3)#세션유지 최대 시간 3분
         session['emailKey']=verNum
 
         return 'Sent'#나중에 성공 실패여부 보내야함
