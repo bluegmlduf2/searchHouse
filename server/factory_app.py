@@ -27,10 +27,13 @@ def create_app(config_mode="test"):
 
     CORS(app,resources={r'*': {'origins': ['http://127.0.0.1:3000','http://localhost:3000','http://34.82.122.40/']}},supports_credentials=True)
     # API server ,View server 다른 도메인에서 사용할때 발생하는 에러 방지
-    # 해당 url(origin)의 요청들이 (http://local..)   웹api서버의 모든 url을 이용가능 r'*' 
+    # console.log(location.origin) : 클라이언트의 오리진확인가능
+    # origin이란 특정 페이지에 접근할 때 사용되는 URL의 Scheme(프로토콜), host(도메인), 포트를 말한다
+    # 해당 url들(['http://127..])에 대해선 해당 path(r'*')의 cors체크를 하지않음 
     # http://localhost:3000 = react view서버의 요청을 허락한다 
-    # console.log(location.origin)
-    # origin이란 특정 페이지에 접근할 때 사용되는 URL의 Scheme(프로토콜), host(도메인), 포트를 말한다. 그래서 same-origin이란 scheme(프로토콜), host(도메인), 포트가 같다는 말이며, 이 3가지 중 하나라도 다르면 cross-origin이다.
+    # get,post요청을 보내기 전 option(preflight)이라는 요청을 보내는데 이는 클라이언트의 origin(http://local..)을 보낸다. 
+    # 이 origin을 서버에서 받고 서버는 access-controlr-allow-origin(http://local..)을 반환하는데 이 origin이 서로 같다면 같은 출처라 판단하고 요청을 허가한다. 
+    # 여기서 cors위반이 되는 이유는 클라이언트에서 서버로 보낼땐 localhost:5000인데 access-cont..origin 으로 반환할땐 localhost:3000을 반환하기때문에 정책위반이 되어 브라우저에서 걸린다
     # supports_credentials :사용자가 인증된 요청을 할수있게함(쿠키,세션)
 
     #매개변수로 bluePrint객체를 받는다. 그러나 import해서 해당 컨트롤러에 blueprint객체를 가져와서 사용
