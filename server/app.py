@@ -9,4 +9,4 @@ app = create_app('dev')  # chose test, dev, pro
 
 if __name__ == '__main__':
     # flask_path설정은 app.py일 경우 해주지 않아도 된다
-    app.run(port='5000')
+    app.run(port='5000',host='0.0.0.0')
