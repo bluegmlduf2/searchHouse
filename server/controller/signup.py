@@ -16,7 +16,7 @@ def register():
     '''회원등록'''
     if request.method == 'PUT':
         args=request.get_json()
-        # print(session['emailKey'])
+        print(session['emailKey'])
         # if args['emailKey']:
         #     print(True)
         # else:
@@ -47,7 +47,7 @@ def sendMail():
         session.permanent = True
         current_app.permanent_session_lifetime = timedelta(minutes=3)#세션유지 최대 시간 3분
         session['emailKey']=verNum
-
+        print(session['emailKey'])
         return 'Sent'#나중에 성공 실패여부 보내야함
 
 @signup_ab.route('/info' ,methods=['GET','POST', 'PUT', 'DELETE'])

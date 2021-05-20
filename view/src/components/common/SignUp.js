@@ -12,7 +12,7 @@ function LoginForm() {
         //withCredentials:true =자격(인증정보)을 허락한다. 즉 쿠키,세션등과같은 값을 허락한다(쿠기,세션필수) ,fetch()사용시 credentials:'include'를 사용
         //기본적으로 비동기는 쿠키,세션정보를 담지않기때문에 세션쿠키사용시 아래와 같이 설정필요
     
-        axios.post('http://localhost:5000/signup-data/sendMail', { email : 'test'},{withCredentials: true })
+        axios.post('http://34.82.122.40:5000/signup-data/sendMail', { email : 'test'},{withCredentials: true })
         .then((result)=>{  
             if(result.status==200){
                 let time=180
@@ -42,7 +42,7 @@ function LoginForm() {
         e.preventDefault()
     
         const option={
-            url: 'http://localhost:5000/signup-data/register',
+            url: 'http://34.82.122.40:5000/signup-data/register',
             method: 'PUT',
             data: {
                 a: 10,

@@ -25,7 +25,7 @@ def create_app(config_mode="test"):
     confmode = dict_confmode[config_mode]
     app.config.from_object(confmode)#매개변수:경로와 파일의 클래스명
 
-    CORS(app,resources={r'*': {'origins': ['http://127.0.0.1:3000','http://localhost:3000','http://34.82.122.40/']}},supports_credentials=True)
+    CORS(app,resources={r'*': {'origins': "*"}},supports_credentials=True)
     # API server ,View server 다른 도메인에서 사용할때 발생하는 에러 방지
     # console.log(location.origin) : 클라이언트의 오리진확인가능
     # origin이란 특정 페이지에 접근할 때 사용되는 URL의 Scheme(프로토콜), host(도메인), 포트를 말한다
