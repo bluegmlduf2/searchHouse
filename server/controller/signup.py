@@ -31,7 +31,7 @@ def sendMail():
         #이메일환경설정파일읽어옴
         config = configparser.ConfigParser()
         config.read('./server/key.ini')
-        secret_key = config['DEFAULT']['EMAIL_APP_KEY']
+        #secret_key = config['DEFAULT']['EMAIL_APP_KEY']
         
         #이메일전송
         verNum=str(random.randint(1,999999)).rjust(6,"0")#난수6자리,공백은0으로채움
