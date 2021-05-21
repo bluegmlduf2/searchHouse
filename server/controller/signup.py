@@ -50,7 +50,9 @@ def sendMail():
         print(session['emailKey'])
         return 'Sent'#나중에 성공 실패여부 보내야함
 
+
 @signup_ab.route('/info' ,methods=['GET','POST', 'PUT', 'DELETE'])
 def info():
     if request.method == 'POST':
+        #return "11"
         return signup.getTable()
