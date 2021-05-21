@@ -28,10 +28,12 @@ def register():
 def sendMail():
     '''회원가입확인메일'''
     if request.method == 'POST':
+        args=request.get_json()['data']
+
         #이메일환경설정파일읽어옴
         config = configparser.ConfigParser()
         config.read('./server/key.ini')
-        #secret_key = config['DEFAULT']['EMAIL_APP_KEY']
+        secret_key = config['DEFAULT']['EMAIL_APP_KEY']
         
         #이메일전송
         verNum=str(random.randint(1,999999)).rjust(6,"0")#난수6자리,공백은0으로채움
@@ -40,7 +42,7 @@ def sendMail():
         # s.login('bluegmlduf2@gmail.com', secret_key)#IMAP사용설정필요
         # msg = MIMEText(f'認証コードです : {verNum}')
         # msg['Subject'] = 'BANGからの認証コードです。'
-        # s.sendmail("bluegmlduf2@gmail.com", "bluegmlduf2@naver.com", msg.as_string())
+        # s.sendmail("bluegmlduf2@gmail.com", args['email'], msg.as_string())
         # s.quit()# 메일 세션 종료
 
         #인증번호 세션 저장

@@ -1,8 +1,8 @@
 /*eslint-disable*/
-import react, { useState, useEffect } from 'react';
+        import react, { useState, useEffect } from 'react';
 import { Row, Col, Form } from 'react-bootstrap'; // npm install react-bootstrap bootstrap
 import axios from 'axios'
-import { lpad } from '../lib/lib.js'
+import { lpad,SHA256 } from '../lib/lib.js'
 
 function LoginForm() {
     let [timer, timerUpd] = useState(false)
@@ -16,9 +16,18 @@ function LoginForm() {
             alert("認証が進行中です。")
             return
         }
+        let pass =SHA256("4fc82b26aecb47d2868c4efbe3581732a3e7cbcc6c2efb32062c08170a05eeb8")
+        console.log(pass) 
+        let args={
+            "":"",
+            "":"",
+            "email":"",
+            "":"",
+            "":"",
+        }
 
         axios.post('http://localhost:5000/signup-data/sendMail', {
-            email: 'test', headers: {
+            data: args, headers: {
                 "Content-Type": "application/json"
             }
         }, { withCredentials: true })
