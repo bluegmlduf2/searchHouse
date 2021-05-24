@@ -1,14 +1,36 @@
 /*eslint-disable*/
-        import react, { useState, useEffect } from 'react';
+import react, { useState, useEffect,useRef } from 'react';
 import { Row, Col, Form } from 'react-bootstrap'; // npm install react-bootstrap bootstrap
 import axios from 'axios'
 import { lpad,SHA256 } from '../lib/lib.js'
 
 function LoginForm() {
+    const inputId=useRef(false)
+    const inputPass=useRef(false)
+    const inputPassCheck=useRef(false)
+    const inputEmail=useRef(false)
+    const inputAuth=useRef(false)
+
     let [timer, timerUpd] = useState(false)
     let [sec, secUpd] = useState("")
 
-    function sendMail(params) {
+    const sendMail=(params) =>{
+
+        const args = {
+            "id":inputId.current.value,
+            "pass":inputPass.current.value,
+            "passCheck":inputPassCheck.current.value,
+            "email":inputEmail.current.value
+        };
+
+        const lableNm=["ID","パスワード","パスワード確認","メールアドレス"]
+
+        Object.values(args).forEach((value, index)=> {
+            if (!value){
+                alert(`[ ${lableNm[index]} ] を入力してください。`)
+                return
+            }
+        });
         //withCredentials:true =자격(인증정보)을 허락한다. 즉 쿠키,세션등과같은 값을 허락한다(쿠기,세션필수) ,fetch()사용시 credentials:'include'를 사용
         //기본적으로 비동기는 쿠키,세션정보를 담지않기때문에 세션쿠키사용시 아래와 같이 설정필요
 
@@ -16,15 +38,9 @@ function LoginForm() {
             alert("認証が進行中です。")
             return
         }
-        let pass =SHA256("4fc82b26aecb47d2868c4efbe3581732a3e7cbcc6c2efb32062c08170a05eeb8")
-        console.log(pass) 
-        let args={
-            "":"",
-            "":"",
-            "email":"",
-            "":"",
-            "":"",
-        }
+
+        // let pass =SHA256("4fc82b26aecb47d2868c4efbe3581732a3e7cbcc6c2efb32062c08170a05eeb8")
+        // console.log(pass) 
 
         axios.post('http://localhost:5000/signup-data/sendMail', {
             data: args, headers: {
@@ -55,7 +71,7 @@ function LoginForm() {
             .catch(() => { })
     }
 
-    function register() {
+    const register=()=> {
                 axios.put('http://localhost:5000/signup-data/register', {
                     email: 'test', headers: {
                         "Content-Type": "application/json"
@@ -75,30 +91,30 @@ function LoginForm() {
 
                             <div className="form-group">
                                 <label>ID</label>
-                                <input type="text" className="form-control" placeholder="IDを入力してください。" />
+                                <input type="text" className="form-control" ref={inputId} placeholder="IDを入力してください。" />
                             </div>
 
                             <div className="form-group">
                                 <label>パスワード</label>
-                                <input type="password" className="form-control" placeholder="パスワードを入力してください。" />
+                                <input type="password"  className="form-control"  ref={inputPass} placeholder="パスワードを入力してください。" />
                             </div>
 
                             <div className="form-group">
                                 <label>パスワードの確認</label>
-                                <input type="password" className="form-control" placeholder="パスワードをもう一度入力してください。" />
+                                <input type="password" className="form-control" ref={inputPassCheck} placeholder="パスワードをもう一度入力してください。" />
                             </div>
 
                             <div className="form-group">
                                 <label>メールアドレス</label>
                                 <div className="input-group mb-3">
-                                    <input type="text" className="form-control" placeholder="メールアドバイスを入力してください。" />
+                                    <input type="email" ref={inputEmail} className="form-control" placeholder="メールアドバイスを入力してください。" />
                                     <button className="btn btn-outline-secondary" type="button" onClick={sendMail} id="button-addon2">認証コード転送</button>
                                 </div>
                             </div>
 
                             <div className="form-group">
                                 <label>認証コード</label>
-                                <input type="text" className="form-control" placeholder="メールに転送された認証コードを入力してください。" />
+                                <input type="text" ref={inputAuth} className="form-control" placeholder="メールに転送された認証コードを入力してください。" />
                             </div>
 
                             <button className="btn btn-dark btn-lg btn-block" type="button" onClick={register}>登録</button>
