@@ -1,10 +1,12 @@
-from flask import Blueprint,request,session,current_app
+import threading
+from flask import Blueprint,request,session,current_app,jsonify
 from model import signup
 from email.mime.text import MIMEText#메일제목본문설정모듈
 import smtplib#메일모듈
 import random
 import configparser#환경설정파일parser
 from datetime import timedelta
+from flask_bcrypt import Bcrypt#암호화
 
 # 라우팅 기본경로 table을 가지는 블루프린터 객체를 생성
 signup_ab = Blueprint('signup_ab', __name__)
@@ -15,12 +17,31 @@ signup_ab = Blueprint('signup_ab', __name__)
 def register():
     '''회원등록'''
     if request.method == 'PUT':
-        args=request.get_json()
-        print(session['emailKey'])
-        # if args['emailKey']:
-        #     print(True)
-        # else:
-        #     print(False)
+        args=request.get_json()['data']
+        if args['auth']==session['emailKey']:
+            #이메일환경설정파일읽어옴
+            config = configparser.ConfigParser()
+            config.read('./server/key.ini')
+            bcrypt = Bcrypt(current_app)
+            current_app.config['SECRET_KEY'] = config['DEFAULT']['BCRYPT_KEY']#세션키암호
+            
+            #암호를해시코드로변경
+            passHash=bcrypt.generate_password_hash(args["pass"])
+            session.pop('emailKey')
+            pass
+            
+            
+            #로그인부분.....................>
+            #paaCheckResult=bcrypt.check_password_hash(passHash, '디비에서가져온패스워드')
+            # #비밀번호가 일치할시 true
+            # if paaCheckResult:
+            #     #암호코드세션제거
+            #     session.pop('emailKey')
+            #     pass
+            # else:
+            #     return jsonify ({ "error": "パスワードを確認してください。",}), 403 
+        else:
+            return jsonify ({ "error": "認証コードが一致しません。",}), 403 
 
         return 'ok'
 

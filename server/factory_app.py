@@ -10,7 +10,7 @@ from controller import resv
 from controller import chart
 from controller import signup
 from flask_cors import CORS
-
+import configparser#환경설정파일parser
 
 dict_confmode = {
     'test': 'setting.TestMode',
@@ -24,6 +24,11 @@ def create_app(config_mode="test"):
     # Flask의 환경설정 파알을 읽음
     confmode = dict_confmode[config_mode]
     app.config.from_object(confmode)#매개변수:경로와 파일의 클래스명
+
+    #세션의암호키설정
+    config = configparser.ConfigParser()
+    config.read('./server/key.ini')
+    app.secret_key= config['DEFAULT']['SESSION_KEY']
 
     #CORS(app,resources={r'*': {'origins': "*"}},supports_credentials=True)
     CORS(app,resources={r'*': {'origins': ['http://127.0.0.1:3000','http://localhost:3000','http://34.82.122.40:3000']}},supports_credentials=True)
