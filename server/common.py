@@ -12,8 +12,9 @@ def decorate(func):
 
 #유저에러_Exception상속
 class UserError(Exception):
+    #인스턴스 생성시 리턴되는 인스턴스변수
     def __init__(self, msg):
-        self.msg = msg
+        self.msg = msg 
     
     #객체가 print함수에 호출될때 표시되는 함수
     def __str__(self):

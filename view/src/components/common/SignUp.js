@@ -15,6 +15,9 @@ function LoginForm() {
     let args = null
     let timerFunc=null
 
+    /**
+     * 인증코드 전송버튼
+     */
     const sendMail = (params) => {
         //유효성체크
         if (!validationCheck()) return
@@ -34,10 +37,11 @@ function LoginForm() {
         }, { withCredentials: true })
             .then((result) => {
                 if (result.status == 200) {
-                    debugger
                     let time = 180
                     //세션 유지 시간에 따른 인증시간 제어
                     timerUpd(true)
+
+                    alert(result.data.message)
 
                     timerFunc = setInterval(() => {
                         let minuite = parseInt(time / 60) //몫을 반환
@@ -54,9 +58,14 @@ function LoginForm() {
                     }, 1000);
                 }
             })
-            .catch(() => { })
+            .catch((result) => { 
+                alert(result.response.data.message)
+            })
     }
 
+    /**
+     * 등록버튼
+     */
     const register = () => {
         //유효성체크
         if (!validationCheck()) return
@@ -84,15 +93,20 @@ function LoginForm() {
                     timerUpd(false)
                     clearInterval(timerFunc)
                     inputAuth.current.value=""
-                    alert("로그인성공")
+                    debugger
+                    alert(result.data.message)
+                    location.href="/signin"
+                    // useHistory().push("/signin")//리액트화면이동
                 }
             })
             .catch((result) => { 
-                debugger
-                alert(result.response.data.error)
+                alert(result.response.data.message)
             })
     }
 
+    /**
+     * 입력값의 유효성 체크
+     */
     const validationCheck = () => {
         let flag = true
         args = {

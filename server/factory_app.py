@@ -9,6 +9,7 @@ from controller import pay
 from controller import resv
 from controller import chart
 from controller import signup
+from controller import signin
 from flask_cors import CORS
 import configparser#환경설정파일parser
 
@@ -49,6 +50,7 @@ def create_app(config_mode="test"):
     app.register_blueprint(resv.resv_ab, url_prefix='/resv')
     app.register_blueprint(chart.chart_ab, url_prefix='/chart')
     app.register_blueprint(signup.signup_ab, url_prefix='/signup-data')
+    app.register_blueprint(signin.signin_ab, url_prefix='/signin-data')
 
     return app
 
