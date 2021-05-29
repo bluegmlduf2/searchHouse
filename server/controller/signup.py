@@ -1,9 +1,9 @@
 from flask import Blueprint,request,session,current_app,jsonify
 from model import signup
-from email.mime.text import MIMEText#메일제목본문설정모듈
-import smtplib#메일모듈
+from common import * #공통
 import random
-import configparser#환경설정파일parser
+import smtplib#메일모듈
+from email.mime.text import MIMEText#메일제목본문설정모듈
 from datetime import timedelta
 from flask_bcrypt import Bcrypt#암호화
 
@@ -19,26 +19,32 @@ def register():
         if request.method == 'PUT':
             args=request.get_json()['data']
             if args['auth']==session['emailKey']:
-                #이메일환경설정파일읽어옴
+                #암호화설정파일읽어옴
                 config = configparser.ConfigParser()
-                config.read('./server/key.ini')
+                config.read('{rootPath}/key.ini'.format(rootPath=current_app.root_path))
                 bcrypt = Bcrypt(current_app)
                 current_app.config['SECRET_KEY'] = config['DEFAULT']['BCRYPT_KEY']#세션키암호
                 
                 #암호를해시코드로변경
                 args["pass"]=bcrypt.generate_password_hash(args["pass"])
-                
-                #멤버정보입력
-                result=signup.insertMember(args)
 
-                #세션제거
-                session.pop('emailKey')
+                #ID,EMAIL 중복체크
+                if signup.checkMember(args):                
+                    #멤버정보입력
+                    result=signup.insertMember(args)
+
+                    #세션제거
+                    session.pop('emailKey')
+                else:
+                    return jsonify ({ "message": "すでに登録されたことがあります。",}), 400
                 
                 return result
             else:
                 return jsonify ({ "message": "認証コードが一致しません。",}), 400
-
+    except UserError as e:
+            return json.dumps({'status': False, 'message': e.msg}), 400
     except Exception as e:
+        traceback.print_exc()
         return jsonify ({ "message": "システムエラー",}), 400
 
 @signup_ab.route('/sendMail' ,methods=['POST'])
@@ -50,7 +56,7 @@ def sendMail():
 
             #이메일환경설정파일읽어옴
             config = configparser.ConfigParser()
-            config.read('./server/key.ini')
+            config.read('{rootPath}/key.ini'.format(rootPath=current_app.root_path))
             secret_key = config['DEFAULT']['EMAIL_APP_KEY']
             
             #이메일전송
@@ -67,10 +73,11 @@ def sendMail():
             session.permanent = True
             current_app.permanent_session_lifetime = timedelta(minutes=3)#세션유지 최대 시간 3분
             session['emailKey']=verNum
-            print(session['emailKey'])
+            print("SESSION_KEY:: "+session['emailKey'])
 
             return jsonify ({ "message": "認証コードを転送しました。",}), 200#나중에 성공 실패여부 보내야함
     except Exception as e:
+        traceback.print_exc()
         return jsonify ({ "message": "システムエラー",}), 400
 
 @signup_ab.route('/info' ,methods=['GET','POST', 'PUT', 'DELETE'])

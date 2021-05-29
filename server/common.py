@@ -1,6 +1,7 @@
 import time
 import traceback
 import simplejson as json # dumps(객체) ->json문자열 , loads(json문자열) ->객체
+import configparser#환경설정파일parser
 from database import Connection
 
 def decorate(func):
