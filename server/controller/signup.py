@@ -26,7 +26,7 @@ def register():
                 current_app.config['SECRET_KEY'] = config['DEFAULT']['BCRYPT_KEY']#세션키암호
                 
                 #암호를해시코드로변경
-                args["pass"]=bcrypt.generate_password_hash(args["pass"])
+                args["pass"]=bcrypt.generate_password_hash(args["pass"]).decode('utf-8')
 
                 #ID,EMAIL 중복체크
                 if signup.checkMember(args):                

@@ -1,28 +1,28 @@
 from common import *
 
-def insertMember(args):
+def getPass(args):
     conn = Connection()
     if conn:
         try:
-            reMsg = '会員登録しました。\nログインしてください。'# return Msg
-
-            #회원등록
-            sql='''INSERT INTO house.`member`
-            (email,pass, regDate)
-            VALUES("{email}", "{passWd}", CURRENT_TIMESTAMP)'''.format(
+            #등록이력체크
+            sql='''SELECT pass
+            FROM house.`member`
+            WHERE email="{email}"'''.format(
                 email=args['email']
-                ,passWd=args['pass'])
+            )
 
-            #raise UserError('사용자에러 테스트')
-            data = conn.execute(sql)
+            data = conn.executeAll(sql)
+
+            #1건이상 있을 경우
+            if len(data)>0:
+                return [True,data[0]["pass"]]
+                
         except UserError as e:
             return json.dumps({'status': False, 'message': e.msg}), 200
         except Exception as e:
             traceback.print_exc()
-            conn.rollback()
             return json.dumps({'message': '관리자에게 문의해주세요.'}), 400
         else:
-            conn.commit()
-            return json.dumps({'status': True, 'message': reMsg}), 200
+            return [False]
         finally:
             conn.close()
