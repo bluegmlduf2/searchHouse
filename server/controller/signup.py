@@ -5,7 +5,7 @@ import random
 import smtplib#메일모듈
 from email.mime.text import MIMEText#메일제목본문설정모듈
 from datetime import timedelta
-from flask_bcrypt import Bcrypt#암호화
+import bcrypt#암호화
 
 # 라우팅 기본경로 table을 가지는 블루프린터 객체를 생성
 signup_ab = Blueprint('signup_ab', __name__)
@@ -19,14 +19,9 @@ def register():
         if request.method == 'PUT':
             args=request.get_json()['data']
             if args['auth']==session['emailKey']:
-                #암호화설정파일읽어옴
-                config = configparser.ConfigParser()
-                config.read('{rootPath}/key.ini'.format(rootPath=current_app.root_path))
-                bcrypt = Bcrypt(current_app)
-                current_app.config['SECRET_KEY'] = config['DEFAULT']['BCRYPT_KEY']#세션키암호
-                
-                #암호를해시코드로변경
-                args["pass"]=bcrypt.generate_password_hash(args["pass"]).decode('utf-8')
+                #암호를 해시코드로 저장, 해시코드=hashpw(바이트코드,솔트) //매개변수 바이트코드만 가능 
+                #encode(utf-8) // 문자열->utf-8바이트코드변환  decode(utf-8)//바이트코드->문자열
+                args["pass"]=bcrypt.hashpw(args["pass"].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
                 #ID,EMAIL 중복체크
                 if signup.checkMember(args):                

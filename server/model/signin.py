@@ -5,7 +5,7 @@ def getPass(args):
     if conn:
         try:
             #등록이력체크
-            sql='''SELECT pass
+            sql='''SELECT id,pass
             FROM house.`member`
             WHERE email="{email}"'''.format(
                 email=args['email']
@@ -15,7 +15,7 @@ def getPass(args):
 
             #1건이상 있을 경우
             if len(data)>0:
-                return [True,data[0]["pass"]]
+                return [True,data[0]]
                 
         except UserError as e:
             return json.dumps({'status': False, 'message': e.msg}), 200

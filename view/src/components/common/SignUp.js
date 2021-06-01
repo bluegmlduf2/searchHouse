@@ -73,7 +73,7 @@ function LoginForm() {
             })
             .catch((result) => {
                 Swal.fire({
-                    icon: 'error',
+                    icon: 'warning',
                     title: 'お知らせ',
                     text: result.response.data.message,
                 })
@@ -133,7 +133,7 @@ function LoginForm() {
             })
             .catch((result) => { 
                 Swal.fire({
-                    icon: 'error',
+                    icon: 'warning',
                     title: 'お知らせ',
                     text: result.response.data.message,
                 })
@@ -208,8 +208,8 @@ function LoginForm() {
         }
 
         //비밀번호 해시암호화
-        args["pass"] = SHA256(args["pass"])
-        args["passCheck"] = SHA256(args["passCheck"])
+        // args["pass"] = SHA256(args["pass"])
+        // args["passCheck"] = SHA256(args["passCheck"])
 
         return flag
     }

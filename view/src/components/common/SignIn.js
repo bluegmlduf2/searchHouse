@@ -57,7 +57,7 @@ function LoginForm() {
         }
         
         //암호화
-        setInitVal(initVal.pass=SHA256(initVal.pass))
+        // setInitVal(initVal.pass=SHA256(initVal.pass))
         
         //통신
         axios.post('http://localhost:5000/signin-data/login', {
@@ -68,11 +68,12 @@ function LoginForm() {
         }, { withCredentials: true })
             .then((result) => {
                 if (result.status == 200) {
+                    debugger
                 }
             })
             .catch((result) => {
                 Swal.fire({
-                    icon: 'error',
+                    icon: 'warning',
                     title: 'お知らせ',
                     text: result.response.data.message,
                 })
