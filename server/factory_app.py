@@ -11,6 +11,7 @@ from controller import chart
 from controller import signup
 from controller import signin
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 import configparser#환경설정파일parser
 
 dict_confmode = {
@@ -30,6 +31,10 @@ def create_app(config_mode="test"):
     config = configparser.ConfigParser()
     config.read('{rootPath}/key.ini'.format(rootPath=app.root_path))
     app.secret_key= config['DEFAULT']['SESSION_KEY']
+    
+    #jwt토큰의암호키설정
+    app.config["JWT_SECRET_KEY"] = config['DEFAULT']['JWT_KEY']
+    jwt = JWTManager(app)
 
     #CORS(app,resources={r'*': {'origins': "*"}},supports_credentials=True)
     CORS(app,resources={r'*': {'origins': ['http://127.0.0.1:3000','http://localhost:3000','http://34.82.122.40']}},supports_credentials=True)

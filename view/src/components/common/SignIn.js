@@ -1,19 +1,21 @@
 /*eslint-disable*/
-import react, { useState } from 'react';
+import react, { useState} from 'react';
 import { Row, Col, Form } from 'react-bootstrap'; // npm install react-bootstrap bootstrap
 import { SHA256 } from '../lib/lib.js'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
-
-function LoginForm() {
+function LoginForm(props) {
+    let history = useHistory();//페이지이동라우터 초기화
     const [initVal, setInitVal] = useState({
         email:"",
         pass:"",
         loginSave:""
     });
-
+    
     const regExpPass = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,10}$/; //  8 ~ 10자 영문, 숫자 조합
     const regExpMail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;//이메일 형식의 정규식
 
@@ -68,7 +70,17 @@ function LoginForm() {
         }, { withCredentials: true })
             .then((result) => {
                 if (result.status == 200) {
+                    //ID 리덕스에 추가
+                    props.dispatch({ type: 'addId',idLoad:result.data['id'] }) 
+                    
+                    //토큰을 로컬스토리지에 저장
+                    if(result.data['token']){
+                        localStorage.setItem('token',result.data['token'])
+                    }
                     debugger
+                    //홈이동
+                    //location.href="/";
+                    history.push('/');
                 }
             })
             .catch((result) => {
@@ -121,4 +133,12 @@ function LoginForm() {
     );
 }
 
-export default LoginForm
+// 리덕스에서 설정한 값을 세팅해주는 함수 (redux->state->props)
+function reduxStateToProps(state) {
+    //index.js에서 설정한 store(state)통채로 가져와서 Nav(props)함수의 props로 던짐 
+    return {
+        state: state.reducer
+    }
+}
+
+export default connect(reduxStateToProps)(LoginForm);
