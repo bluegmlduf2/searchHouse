@@ -5,8 +5,9 @@ import axios from 'axios'
 import { lpad, SHA256 } from '../lib/lib.js'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { connect } from 'react-redux';
 
-function LoginForm() {
+function RegForm(props) {
     const inputId = useRef(false)
     const inputPass = useRef(false)
     const inputPassCheck = useRef(false)
@@ -37,7 +38,7 @@ function LoginForm() {
 
         //withCredentials:true =자격(인증정보)을 허락한다. 즉 쿠키,세션등과같은 값을 허락한다(쿠기,세션필수) ,fetch()사용시 credentials:'include'를 사용
         //기본적으로 비동기는 쿠키,세션정보를 담지않기때문에 세션쿠키사용시 아래와 같이 설정필요
-        axios.post('http://localhost:5000/signup-data/sendMail', {
+        axios.post(`${props.state.rootUrl}/signup-data/sendMail`, {
             data: args, headers: {
                 "Content-Type": "application/json"
             }
@@ -106,8 +107,7 @@ function LoginForm() {
         }
 
         args["auth"]=inputAuth.current.value
-
-        axios.put('http://localhost:5000/signup-data/register', {
+        axios.put(`${props.state.rootUrl}/signup-data/register`, {
             data: args, headers: {
                 "Content-Type": "application/json"
             }
@@ -215,7 +215,7 @@ function LoginForm() {
     }
 
     return (
-        <Row className="loginForm justify-content-md-center">
+        <Row className="regForm justify-content-md-center">
             <Col md="4">
                 <div className="div-outline">
                     <Form>
@@ -262,6 +262,12 @@ function LoginForm() {
     );
 }
 
+// 리덕스에서 설정한 값을 세팅해주는 함수 (redux->state->props)
+function reduxStateToProps(state) {
+    //index.js에서 설정한 store(state)통채로 가져와서 Nav(props)함수의 props로 던짐 
+    return {
+        state: state.reducer
+    }
+}
 
-
-export default LoginForm
+export default connect(reduxStateToProps)(RegForm);

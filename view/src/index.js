@@ -15,8 +15,8 @@ import { Provider } from 'react-redux'// 리덕스 환경설정
 import { combineReducers, createStore } from 'redux'// 리덕스 환경설정 
 
 
-//로그인세션을 리덕스로 관리함
-let initState = {"id":null}
+//루트url과 로그인세션을 리덕스로 관리함
+let initState = {"rootUrl":"http://localhost:5000","id":null}
 
 //리덕스의 값 수정 방법을 정의 (해당 함수는 state를 반환해야함)
 function reducer(state = initState, action) {
