@@ -49,28 +49,34 @@ def sendMail():
         if request.method == 'POST':
             args=request.get_json()['data']
 
-            #이메일환경설정파일읽어옴
-            config = configparser.ConfigParser()
-            config.read('{rootPath}/key.ini'.format(rootPath=current_app.root_path))
-            secret_key = config['DEFAULT']['EMAIL_APP_KEY']
-            
-            #이메일전송
-            verNum=str(random.randint(1,999999)).rjust(6,"0")#난수6자리,공백은0으로채움
-            # s = smtplib.SMTP('smtp.gmail.com', 587)#구글이메일세션연결,지메일587포트번호
-            # s.starttls()#TLS 보안 시작
-            # s.login('bluegmlduf2@gmail.com', secret_key)#IMAP사용설정필요
-            # msg = MIMEText(f'認証コードです : {verNum}')
-            # msg['Subject'] = 'BANGからの認証コードです。'
-            # s.sendmail("bluegmlduf2@gmail.com", args['email'], msg.as_string())
-            # s.quit()# 메일 세션 종료
+            #ID,EMAIL 중복체크
+            if signup.checkMember(args):                
 
-            #인증번호 세션 저장
-            session.permanent = True
-            current_app.permanent_session_lifetime = timedelta(minutes=3)#세션유지 최대 시간 3분
-            session['emailKey']=verNum
-            print("SESSION_KEY:: "+session['emailKey'])
+                #이메일환경설정파일읽어옴
+                config = configparser.ConfigParser()
+                config.read('{rootPath}/key.ini'.format(rootPath=current_app.root_path))
+                secret_key = config['DEFAULT']['EMAIL_APP_KEY']
+                
+                #이메일전송
+                verNum=str(random.randint(1,999999)).rjust(6,"0")#난수6자리,공백은0으로채움
+                s = smtplib.SMTP('smtp.gmail.com', 587)#구글이메일세션연결,지메일587포트번호
+                s.starttls()#TLS 보안 시작
+                s.login('bluegmlduf2@gmail.com', secret_key)#IMAP사용설정필요
+                msg = MIMEText(f'認証コードです : {verNum}')
+                msg['Subject'] = 'BANGからの認証コードです。'
+                s.sendmail("bluegmlduf2@gmail.com", args['email'], msg.as_string())
+                s.quit()# 메일 세션 종료
 
-            return jsonify ({ "message": "認証コードを転送しました。",}), 200#나중에 성공 실패여부 보내야함
+                #인증번호 세션 저장
+                session.permanent = True
+                current_app.permanent_session_lifetime = timedelta(minutes=3)#세션유지 최대 시간 3분
+                session['emailKey']=verNum
+                print("SESSION_KEY:: "+session['emailKey'])
+
+                return jsonify ({ "message": "認証コードを転送しました。",}), 200#나중에 성공 실패여부 보내야함
+            else:
+                return jsonify ({ "message": "すでに登録されたことがあります。",}), 400
+
     except Exception as e:
         traceback.print_exc()
         return jsonify ({ "message": "システムエラー",}), 400

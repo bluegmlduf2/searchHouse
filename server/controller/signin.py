@@ -1,4 +1,5 @@
 from flask import Blueprint, request, session, current_app, jsonify
+import jwt
 from model import signin
 from common import *  # 공통
 import bcrypt  # 암호화

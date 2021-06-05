@@ -59,7 +59,7 @@ function LoginForm(props) {
         }
 
         //암호화
-        // setInitVal(initVal.pass=SHA256(initVal.pass))
+        setInitVal(initVal.pass=SHA256(initVal.pass))
 
         //통신
         axios.post(`${props.state.rootUrl}/signin-data/login`, {
@@ -72,14 +72,22 @@ function LoginForm(props) {
                 if (result.status == 200) {
                     //ID 리덕스에 추가
                     props.dispatch({ type: 'addId', idLoad: result.data['id'] })
-
+                    
                     //토큰을 로컬스토리지에 저장
                     if (result.data['token']) {
                         localStorage.setItem('token', result.data['token'])
                     }
-
+                    
                     //홈이동
                     history.push('/');
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'お知らせ',
+                        text: result.data['id']+' 様ようこそ！',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                 }
             })
             .catch((result) => {

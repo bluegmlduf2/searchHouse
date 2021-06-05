@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import react, { useState ,useEffect} from 'react';
 import {Row,Col} from 'react-bootstrap'; // npm install react-bootstrap bootstrap
-import { Route, Link, Switch ,useLocation} from 'react-router-dom' /* 라우터 초기 설정 */
+import { Route, Link, Switch ,useHistory,useLocation} from 'react-router-dom' /* 라우터 초기 설정 */
 import { connect } from 'react-redux';
 import axios from 'axios'
 import Swal from 'sweetalert2'
@@ -10,12 +10,31 @@ import Swal from 'sweetalert2'
 function Nav(props){
     const navFont=(useLocation().pathname.length>1 ? 'a-fontBlack ' : null)
     const navLine=(useLocation().pathname.length>1 ? 'div-bottomLine ' : null)
-    const [tokenChk, setTokenChk] = useState(false);
+    const history = useHistory();//페이지이동라우터 초기화
 
-    //로그아웃기능
+    //로그아웃기능 //swal의 text속성은 1줄밖에 사용못함, html속성을 사용하면 여러줄 사용가능과 동시에 html태그 사용가능
     function logout() {
-        props.dispatch({ type: 'removeId' })//리덕스의 아이디삭제
-        localStorage.removeItem('token') //로컬스토리지의 토큰삭제
+        Swal.fire({
+            title: 'お知らせ',
+            html: "ログアウトしますか？<br/>保存しているログイン情報も削除されます",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ロクアウト',
+            cancelButtonText: "キャンセル"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                    'お知らせ',
+                    'ご利用ありがとうございました。',
+                    'success'
+                )
+                props.dispatch({ type: 'removeId' })//리덕스의 아이디삭제
+                localStorage.removeItem('token') //로컬스토리지의 토큰삭제
+                history.push('/');
+            }
+          })
     }
 
     //로그인 토큰 체크
@@ -23,7 +42,7 @@ function Nav(props){
         //withCredentials:true =자격(인증정보)을 허락한다. 즉 쿠키,세션등과같은 값을 허락한다(쿠기,세션필수) ,fetch()사용시 credentials:'include'를 사용
         //기본적으로 비동기는 쿠키,세션정보를 담지않기때문에 세션쿠키사용시 아래와 같이 설정필요
         let token=localStorage.getItem('token')
-        
+
         //로그인토큰체크  : axios.post(url,data,option)경우 option에 헤더만 보내줄 경우에도 data를 {}공백으로 보내줘야함 
         if(token){
             axios.post(`${props.state.rootUrl}/signin-data/checkToken`,{}, {
@@ -36,15 +55,13 @@ function Nav(props){
                 if (result.status == 200 && result.data) {
                     //로그인토큰 리덕스에 할당
                     props.dispatch({ type: 'addId', idLoad: result.data})
-                    setTokenChk(true)
+                    // setTokenChk(true)
                 }
             })
             .catch((result) => {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'お知らせ',
-                    text: result.response.data.message,
-                })
+                //허가되지 않은 로그인 토큰 & 유효기간을 초과한 토큰일 경우 로컬스토리지의 토큰을 제거
+                props.dispatch({ type: 'removeId' })//리덕스의 아이디삭제   
+                localStorage.removeItem('token') //로컬스토리지의 토큰삭제
             })
         }
     })
