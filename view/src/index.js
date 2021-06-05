@@ -8,12 +8,11 @@ import './css/lib/bootstrap.min.css'
 import './css/main/main.css';
 import './css/map/map.css';
 import './css/sell/sell.css';
+import './css/lib/react-bootstrap-range-slider.css';//부트스트랩 레인지컴포넌트 환경설정
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
-import './css/lib/react-bootstrap-range-slider.css';
 import { Provider } from 'react-redux'// 리덕스 환경설정 
-import { combineReducers, createStore } from 'redux'// 리덕스 환경설정 
-
+import { combineReducers, createStore, } from 'redux'// 리덕스 환경설정 
 
 //루트url과 로그인세션을 리덕스로 관리함
 let initState = {"rootUrl":"http://localhost:5000","id":null}
@@ -38,6 +37,10 @@ function reducer(state = initState, action) {
 let store = createStore(combineReducers({ reducer }))
 // let store = createStore(reducer)//전달값 1개인 경우
 
+//새로고침막기 (확인창표시)
+window.onbeforeunload = function() {
+  return "disable refresh";
+};
 
 ReactDOM.render(
   <React.StrictMode>

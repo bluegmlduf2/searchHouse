@@ -4,7 +4,7 @@ import { Row, Col, Form } from 'react-bootstrap'; // npm install react-bootstrap
 import axios from 'axios'
 import { lpad, SHA256 } from '../lib/lib.js'
 import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+// import withReactContent from 'sweetalert2-react-content'
 import { connect } from 'react-redux';
 
 function RegForm(props) {
@@ -17,7 +17,7 @@ function RegForm(props) {
     let [sec, secUpd] = useState("")
     let args = null
     let timerFunc=null
-    const MySwal = withReactContent(Swal)//sweetAlert객체생성
+    // const MySwal = withReactContent(Swal)//sweetAlert객체생성
 
     /**
      * 인증코드 전송버튼

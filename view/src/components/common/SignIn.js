@@ -4,7 +4,7 @@ import { Row, Col, Form } from 'react-bootstrap'; // npm install react-bootstrap
 import { SHA256 } from '../lib/lib.js'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+// import withReactContent from 'sweetalert2-react-content'
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
