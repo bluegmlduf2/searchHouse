@@ -6,6 +6,9 @@ import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import RangeSlider from 'react-bootstrap-range-slider';
 import GoogleMapReact from 'google-map-react';
 import { keys } from '../../key.js'
+import axios from 'axios'
+import { connect } from 'react-redux';
+import Swal from 'sweetalert2'
 
 
 function Main() {
@@ -150,4 +153,12 @@ function Main() {
     );
 }
 
-export default Main;
+// 리덕스에서 설정한 값을 세팅해주는 함수 (redux->state->props)
+function reduxStateToProps(state) {
+    //index.js에서 설정한 store(state)통채로 가져와서 Nav(props)함수의 props로 던짐 
+    return {
+        state: state.reducer
+    }
+}
+
+export default connect(reduxStateToProps)(Main);

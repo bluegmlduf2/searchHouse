@@ -1,15 +1,19 @@
 /*eslint-disable*/
-import react, { useState } from 'react';//export Default된 항목은 {}없이 받음
-import { Row, Col, InputGroup, FormControl, Button, Form, Pagination, Image, Tabs, Tab ,ButtonGroup} from 'react-bootstrap'; // npm install react-bootstrap bootstrap
+import react, { useState, useRef } from 'react';//export Default된 항목은 {}없이 받음
+import { Row, Col, InputGroup, FormControl, Button, Form, Pagination, Image, Tabs, Tab, ButtonGroup } from 'react-bootstrap'; // npm install react-bootstrap bootstrap
 import { Link } from 'react-router-dom' /* 라우터 초기 설정 */
 import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import RangeSlider from 'react-bootstrap-range-slider';
 import GoogleMapReact from 'google-map-react';
 import { keys } from '../../key.js'
+import axios from 'axios'
+import { connect } from 'react-redux';
+import Swal from 'sweetalert2'
 
 
 function Main() {
-    let [roomInfo, roomUpd] = useState([1, 4, 5, 6])
+    const btnSearchPost = useRef(false)
+    const [roomInfo, roomUpd] = useState([1, 4, 5, 6])
     const optionsArray = [
         { key: "2", label: "ワンルーム" },
         { key: "3", label: "1K" },
@@ -20,11 +24,11 @@ function Main() {
         { key: "8", label: "2LDK" },
     ];
 
-    let [roomDetailInfo, roomDetailUpd] = useState([1, 2, 3, 4, 5, 6])
-
+    const [roomDetailInfo, roomDetailUpd] = useState([1, 2, 3, 4, 5, 6])
 
     let active = 2;
     let items = [];
+
     for (let number = 1; number <= 5; number++) {
         items.push(
             <Pagination.Item key={number} active={number === active}>
@@ -38,6 +42,26 @@ function Main() {
         zoom: 11
     })
 
+    function searchPost() {
+            //통신
+            axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=1008111&language=ja&components=country:JP&key=${keys.googleKey}`, {
+            headers: {
+                "Content-Type": "application/json"
+            }})
+            .then((result) => {
+                if (result.status == 200) {
+                    debugger
+                }
+            })
+            .catch((result) => {
+                debugger
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'お知らせ',
+                    text: result.response.data.message,
+                })
+            })
+    }
 
     return (
         <Row className="sell justify-content-center">
@@ -80,7 +104,7 @@ function Main() {
                                         <InputGroup>
                                             <FormControl placeholder="1050011" />
                                             <InputGroup.Append>
-                                                <Button variant="secondary">検索</Button>
+                                                <Button variant="secondary" onClick={searchPost} ref={btnSearchPost}>検索</Button>
                                             </InputGroup.Append>
                                         </InputGroup>
                                     </Form.Group>
@@ -208,4 +232,12 @@ function Main() {
     );
 }
 
-export default Main;
+// 리덕스에서 설정한 값을 세팅해주는 함수 (redux->state->props)
+function reduxStateToProps(state) {
+    //index.js에서 설정한 store(state)통채로 가져와서 Nav(props)함수의 props로 던짐 
+    return {
+        state: state.reducer
+    }
+}
+
+export default connect(reduxStateToProps)(Main);
