@@ -1,1 +1,4 @@
-export const keys = { googleKey: "" }
+const keys = { googleKey: ""
+, googleKey_geo: "" }
+
+export { keys }

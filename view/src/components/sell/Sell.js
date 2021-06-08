@@ -44,7 +44,7 @@ function Main() {
 
     function searchPost() {
             //통신
-            axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=1008111&language=ja&components=country:JP&key=${keys.googleKey}`, {
+            axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=1008111&language=ja&components=country:JP&key=${keys.googleKey_geo}`, {
             headers: {
                 "Content-Type": "application/json"
             }})
