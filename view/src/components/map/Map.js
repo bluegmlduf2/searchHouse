@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import Swal from 'sweetalert2'
 
 
-function Main() {
+function MapMain() {
     let [roomInfo, roomUpd] = useState([1, 4, 5, 6])
     const optionsArray = [
         { key: "2", label: "ワンルーム" },
@@ -161,4 +161,4 @@ function reduxStateToProps(state) {
     }
 }
 
-export default connect(reduxStateToProps)(Main);
+export default connect(reduxStateToProps)(MapMain);

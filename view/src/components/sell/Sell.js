@@ -11,57 +11,78 @@ import { connect } from 'react-redux';
 import Swal from 'sweetalert2'
 
 
-function Main() {
+function Sell() {
     const btnSearchPost = useRef(false)
-    const [roomInfo, roomUpd] = useState([1, 4, 5, 6])
-    const optionsArray = [
-        { key: "2", label: "ワンルーム" },
-        { key: "3", label: "1K" },
-        { key: "4", label: "1DK" },
-        { key: "5", label: "1LDK" },
-        { key: "6", label: "2K" },
-        { key: "7", label: "2DK" },
-        { key: "8", label: "2LDK" },
-    ];
 
-    const [roomDetailInfo, roomDetailUpd] = useState([1, 2, 3, 4, 5, 6])
+    const [initVal, setInitVal] = useState({
+        houseType1: "",
+        houseType2: "",
+        post: "",
+        city1: "",
+        city2: "",
+        city3: "",
+        title: "",
+        content: "",
+        file1: "",
+        file2: ""
+    });
 
-    let active = 2;
-    let items = [];
-
-    for (let number = 1; number <= 5; number++) {
-        items.push(
-            <Pagination.Item key={number} active={number === active}>
-                {number}
-            </Pagination.Item>
-        );
-    }
-
-    let [locationInfo, locationUpd] = useState({
-        center: { lat: 35.681167, lng: 139.767052 },
-        zoom: 11
-    })
 
     function searchPost() {
-            //통신
-            axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=1008111&language=ja&components=country:JP&key=${keys.googleKey_geo}`, {
-            headers: {
-                "Content-Type": "application/json"
-            }})
-            .then((result) => {
-                if (result.status == 200) {
-                    debugger
+
+        //우편번호길이체크
+        if (initVal.post.length !=7) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'お知らせ',
+                text: `郵便番号は七桁入力してください。`,
+            })
+            return
+        }
+
+        //구글지오코딩파라미터 ../반환받을형태?우편주소?반환받을언어?검색할지역&키
+        axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${initVal.post}&language=ja&components=country:JP&key=${keys.googleKey_geo}`, {
+        headers: {
+            "Content-Type": "application/json"
+        }})
+        .then((result) => {
+            
+            if (result.status == 200) {
+                let addrArr=result.data.results[0].address_components //주소결과
+                let latArr=result.data.results[0].geometry.location.lat //위도경로결과
+
+                //첫번째 우편번호 마지막 국가명은 필요없다(i>0,-2)
+                for (let i = addrArr.length-2; i > 0; i--) {   
+                    //도도후현
+                    if(i==addrArr.length-2){
+                        document.querySelector(".city1").value=addrArr[i].long_name
+                        continue
+                    }
+
+                    //주소
+                    let city2=document.querySelector(".city2");
+                    city2.value+=' '+addrArr[i].long_name
                 }
+                
+            }
+        })
+        .catch((result) => {
+            Swal.fire({
+                icon: 'warning',
+                title: 'お知らせ',
+                text: result.response.data.message,
             })
-            .catch((result) => {
-                debugger
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'お知らせ',
-                    text: result.response.data.message,
-                })
-            })
+        })
     }
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        //1.initVal을 ...을 이용한 스프레드구문으로 풀고 넣은 다음 2.name을 갱신함
+        setInitVal({
+            ...initVal,
+            [name]: value,
+        });
+    };
 
     return (
         <Row className="sell justify-content-center">
@@ -74,7 +95,7 @@ function Main() {
                                     {/* Form.Group 상하로 라벨과 입력컨트롤러를 넣어주고 마진을 자동으로 조절해줌 */}
                                     <Form.Group>
                                         <Form.Label>建物種別</Form.Label>
-                                        <Form.Control as="select" custom>
+                                        <Form.Control as="select" custom name="houseType1" onChange={handleInputChange}>
                                             <option>マンション</option>
                                             <option>アパート</option>
                                             <option>一戸建て</option>
@@ -85,7 +106,7 @@ function Main() {
                                 <Col md="6">
                                     <Form.Group>
                                         <Form.Label>間取りタイプ</Form.Label>
-                                        <Form.Control as="select">
+                                        <Form.Control as="select" name="houseType2" onChange={handleInputChange}>
                                             <option>ワンルーム</option>
                                             <option>1K</option>
                                             <option>1DK</option>
@@ -102,7 +123,7 @@ function Main() {
                                     <Form.Group>
                                         <Form.Label>郵便番号</Form.Label>
                                         <InputGroup>
-                                            <FormControl placeholder="1050011" />
+                                            <FormControl type="number" placeholder="1050011" name="post" onChange={handleInputChange}/>
                                             <InputGroup.Append>
                                                 <Button variant="secondary" onClick={searchPost} ref={btnSearchPost}>検索</Button>
                                             </InputGroup.Append>
@@ -112,19 +133,19 @@ function Main() {
                                 <Col md="6">
                                     <Form.Group>
                                         <Form.Label>都道府県</Form.Label>
-                                        <Form.Control type="text" placeholder="東京都" />
+                                        <Form.Control type="text" className="city1" name="city1" onChange={handleInputChange} placeholder="東京都" readOnly/>
                                     </Form.Group>
                                 </Col>
                                 <Col md="6">
                                     <Form.Group>
-                                        <Form.Label>住所</Form.Label>
-                                        <Form.Control type="text" placeholder="港区芝公園４丁目２−8" />
+                                        <Form.Label>市区町村・番地</Form.Label>
+                                        <Form.Control type="text" className="city2" name="city2" onChange={handleInputChange} placeholder="港区芝公園４丁目２−8" />
                                     </Form.Group>
                                 </Col>
                                 <Col md="12">
                                     <Form.Group>
-                                        <Form.Label>建物名</Form.Label>
-                                        <Form.Control type="text" placeholder="東京タワー" />
+                                        <Form.Label>建物名・部屋番号</Form.Label>
+                                        <Form.Control type="text" name="city3" onChange={handleInputChange} placeholder="東京タワー" />
                                     </Form.Group>
                                 </Col>
                             </Row>
@@ -132,13 +153,13 @@ function Main() {
                                 <Col md="8">
                                     <Form.Group>
                                         <Form.Label>タイトル</Form.Label>
-                                        <Form.Control type="text" placeholder="東京都" />
+                                        <Form.Control type="text" placeholder="タイトルを入力してください。" name="title" onChange={handleInputChange} />
                                     </Form.Group>
                                 </Col>
                                 <Col md="8">
                                     <Form.Group>
                                         <Form.Label>コンテンツ</Form.Label>
-                                        <Form.Control as="textarea" rows={3} />
+                                        <Form.Control as="textarea" rows={3} name="content" onChange={handleInputChange}/>
                                     </Form.Group>
                                 </Col>
                             </Row>
@@ -151,6 +172,8 @@ function Main() {
                                             label="メイン写真を選択してください"
                                             data-browse="選択"
                                             custom
+                                            name="file1"
+                                            onChange={handleInputChange}
                                         />
                                     </Form.Group>
                                     <div className="text-center">
@@ -164,6 +187,8 @@ function Main() {
                                             id="custom-file"
                                             label="メイン写真を選択してください"
                                             data-browse="選択"
+                                            name="file2"
+                                            onChange={handleInputChange}
                                             custom
                                         />
                                     </Form.Group>
@@ -240,4 +265,4 @@ function reduxStateToProps(state) {
     }
 }
 
-export default connect(reduxStateToProps)(Main);
+export default connect(reduxStateToProps)(Sell);
