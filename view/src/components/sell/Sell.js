@@ -1,17 +1,13 @@
 /*eslint-disable*/
 import react, { useState, useRef } from 'react';//export Default된 항목은 {}없이 받음
 import { Row, Col, InputGroup, FormControl, Button, Form, Pagination, Image, Tabs, Tab, ButtonGroup } from 'react-bootstrap'; // npm install react-bootstrap bootstrap
-import { Link } from 'react-router-dom' /* 라우터 초기 설정 */
-import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
-import RangeSlider from 'react-bootstrap-range-slider';
-import GoogleMapReact from 'google-map-react';
 import { keys } from '../../key.js'
 import axios from 'axios'
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2'
 
 
-function Sell() {
+function Sell(props) {
     const btnSearchPost = useRef(false)
 
     const [initVal, setInitVal] = useState({
@@ -23,8 +19,8 @@ function Sell() {
         city3: "",
         title: "",
         content: "",
-        file1: "",
-        file2: ""
+        file1: "./cardImg.svg",
+        file2: "./cardImg.svg"
     });
 
 
@@ -46,8 +42,9 @@ function Sell() {
             "Content-Type": "application/json"
         }})
         .then((result) => {
-            
-            if (result.status == 200) {
+            debugger
+            //상태가 200정상이고 검색결과가 있는경우
+            if (result.status == 200 && result.data.status=="OK") {
                 let addrArr=result.data.results[0].address_components //주소결과
                 let latArr=result.data.results[0].geometry.location.lat //위도경로결과
 
@@ -63,16 +60,65 @@ function Sell() {
                     let city2=document.querySelector(".city2");
                     city2.value+=' '+addrArr[i].long_name
                 }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'お知らせ',
+                    text: `検索完了しました。`,
+                })
                 
+            }else{
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'お知らせ',
+                    text: `有効な郵便番号ではありません。`,
+                })
+                debugger
+                document.querySelector(".post").value=""
+                document.querySelector(".city1").value=""
+                document.querySelector(".city2").value=""
+                document.querySelector(".city3").value=""
+
+                return
             }
         })
         .catch((result) => {
+            debugger
             Swal.fire({
                 icon: 'warning',
                 title: 'お知らせ',
                 text: result.response.data.message,
             })
         })
+    }
+
+    //이미지를 임시폴더에 업로드
+    function imageUpload(e) {
+        debugger
+        const formData = new FormData();
+        formData.append(
+            "uploadImages",
+            e.target.files[0]
+        );
+        
+        axios.post(`${props.state.rootUrl}/sell-data/imageUploadTemp`, {
+            data: formData,
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+            }, { withCredentials: true })
+            .then((result) => {
+                if (result.status == 200) {
+
+                }
+            })
+            .catch((result) => {
+                debugger
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'お知らせ',
+                    text: '',
+                })
+            })
     }
 
     const handleInputChange = (e) => {
@@ -123,7 +169,7 @@ function Sell() {
                                     <Form.Group>
                                         <Form.Label>郵便番号</Form.Label>
                                         <InputGroup>
-                                            <FormControl type="number" placeholder="1050011" name="post" onChange={handleInputChange}/>
+                                            <FormControl type="number" className="post" placeholder="1050011" name="post" onChange={handleInputChange}/>
                                             <InputGroup.Append>
                                                 <Button variant="secondary" onClick={searchPost} ref={btnSearchPost}>検索</Button>
                                             </InputGroup.Append>
@@ -145,7 +191,7 @@ function Sell() {
                                 <Col md="12">
                                     <Form.Group>
                                         <Form.Label>建物名・部屋番号</Form.Label>
-                                        <Form.Control type="text" name="city3" onChange={handleInputChange} placeholder="東京タワー" />
+                                        <Form.Control type="text" className="city3" name="city3" onChange={handleInputChange} placeholder="東京タワー" />
                                     </Form.Group>
                                 </Col>
                             </Row>
@@ -173,11 +219,11 @@ function Sell() {
                                             data-browse="選択"
                                             custom
                                             name="file1"
-                                            onChange={handleInputChange}
+                                            onChange={imageUpload}
                                         />
                                     </Form.Group>
                                     <div className="text-center">
-                                        <Image src="./cardImg.svg" xs={12} md={6} thumbnail />
+                                        <Image src={initVal.file1} xs={12} md={6} thumbnail />
                                     </div>
                                 </Col>
                                 <Col md="6">
@@ -193,7 +239,7 @@ function Sell() {
                                         />
                                     </Form.Group>
                                     <div className="text-center">
-                                        <Image src="./cardImg.svg" xs={12} md={6} thumbnail />
+                                        <Image src={initVal.file2} xs={12} md={6} thumbnail />
                                     </div>
                                 </Col>
                             </Row>

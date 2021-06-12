@@ -4,6 +4,16 @@
     // 자세한 내용을 보려면 https://go.microsoft.com/fwlink/?linkid=830387을(를) 방문하세요.
     "version": "0.2.0",
     "configurations": [
+        // 리액트디버깅
+        {
+            "command": "npm start",
+            "name": "Run npm start",
+            "request": "launch",
+            "type": "node-terminal",
+            "cwd": "${workspaceFolder}/view"
+        },
+
+        //플라스크디버깅
         {
             "name": "Python: Flask",
             "type": "python",
