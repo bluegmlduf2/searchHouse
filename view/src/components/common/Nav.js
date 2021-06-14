@@ -47,10 +47,10 @@ function Nav(props){
         if(token){
             axios.post(`${props.state.rootUrl}/signin-data/checkToken`,{}, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
-                }
-            }, { withCredentials: true })
+                },withCredentials: true
+            })
             .then((result) => {
                 if (result.status == 200 && result.data) {
                     //로그인토큰 리덕스에 할당

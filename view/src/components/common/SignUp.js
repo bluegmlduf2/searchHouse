@@ -16,7 +16,7 @@ function RegForm(props) {
     let [timer, timerUpd] = useState(false)
     let [sec, secUpd] = useState("")
     let args = null
-    let timerFunc=null
+    let timerFunc = null
     // const MySwal = withReactContent(Swal)//sweetAlert객체생성
 
     /**
@@ -25,7 +25,7 @@ function RegForm(props) {
     const sendMail = (params) => {
         //유효성체크
         if (!validationCheck()) return
-        
+
         //타이머체크
         if (timer === true) {
             Swal.fire({
@@ -38,18 +38,21 @@ function RegForm(props) {
 
         //withCredentials:true =자격(인증정보)을 허락한다. 즉 쿠키,세션등과같은 값을 허락한다(쿠기,세션필수) ,fetch()사용시 credentials:'include'를 사용
         //기본적으로 비동기는 쿠키,세션정보를 담지않기때문에 세션쿠키사용시 아래와 같이 설정필요
-        axios.post(`${props.state.rootUrl}/signup-data/sendMail`, {
-            data: args, headers: {
-                "Content-Type": "application/json"
-            }
-        }, { withCredentials: true })
+        axios.post(`${props.state.rootUrl}/signup-data/sendMail`
+            , { data: args }
+            , {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+                , withCredentials: true
+            })
             .then((result) => {
                 if (result.status == 200) {
                     let time = 180
                     //세션 유지 시간에 따른 인증시간 제어
                     timerUpd(true)
-                    inputEmail.current.readOnly=true
-                    
+                    inputEmail.current.readOnly = true
+
                     Swal.fire({
                         icon: 'info',
                         title: 'お知らせ',
@@ -63,7 +66,7 @@ function RegForm(props) {
 
                         //0초미만일시 정지
                         if (time < 0) {
-                            inputEmail.current.readOnly=false
+                            inputEmail.current.readOnly = false
                             timerUpd(false)
                             clearInterval(timerFunc)
                         }
@@ -88,7 +91,7 @@ function RegForm(props) {
         //유효성체크
         if (!validationCheck()) return
 
-        if(!timer){
+        if (!timer) {
             Swal.fire({
                 icon: 'warning',
                 title: 'お知らせ',
@@ -96,7 +99,7 @@ function RegForm(props) {
             })
             return
         }
-        if(!inputAuth.current.value){
+        if (!inputAuth.current.value) {
             Swal.fire({
                 icon: 'warning',
                 title: 'お知らせ',
@@ -106,32 +109,30 @@ function RegForm(props) {
             return
         }
 
-        args["auth"]=inputAuth.current.value
-        axios.put(`${props.state.rootUrl}/signup-data/register`, {
-            data: args, headers: {
-                "Content-Type": "application/json"
-            }
-        }, { withCredentials: true })
+        args["auth"] = inputAuth.current.value
+        axios.put(`${props.state.rootUrl}/signup-data/register`,
+            { data: args }
+            , { headers: { "Content-Type": "application/json" }, withCredentials: true })
             .then((result) => {
                 //인증코드 유효기간 메시지 초기화
-                if(result.status=="200"){
+                if (result.status == "200") {
                     timerUpd(false)
                     clearInterval(timerFunc)
-                    inputAuth.current.value=""
-                    inputEmail.current.readOnly=false
-                    
+                    inputAuth.current.value = ""
+                    inputEmail.current.readOnly = false
+
                     Swal.fire({
                         icon: 'info',
                         title: 'お知らせ',
                         text: result.data.message,
-                    }).then((result)=>{
-                        if(result.isConfirmed){
-                            location.href="/signin"//로그인페이지이동
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.href = "/signin"//로그인페이지이동
                         }
                     })
                 }
             })
-            .catch((result) => { 
+            .catch((result) => {
                 Swal.fire({
                     icon: 'warning',
                     title: 'お知らせ',
@@ -223,23 +224,23 @@ function RegForm(props) {
 
                         <div className="form-group">
                             <label>ID</label>
-                            <input type="text" className="form-control" ref={inputId} placeholder="IDを入力してください。"/>
+                            <input type="text" className="form-control" ref={inputId} placeholder="IDを入力してください。" />
                         </div>
 
                         <div className="form-group">
                             <label>パスワード</label>
-                            <input type="password" className="form-control" ref={inputPass} placeholder="英語を含めた8桁~12桁を入力してください。"/>
+                            <input type="password" className="form-control" ref={inputPass} placeholder="英語を含めた8桁~12桁を入力してください。" />
                         </div>
 
                         <div className="form-group">
                             <label>パスワードの確認</label>
-                            <input type="password" className="form-control" ref={inputPassCheck} placeholder="パスワードをもう一度入力してください。"/>
+                            <input type="password" className="form-control" ref={inputPassCheck} placeholder="パスワードをもう一度入力してください。" />
                         </div>
 
                         <div className="form-group">
                             <label>メールアドレス</label>
                             <div className="input-group mb-3">
-                                <input type="email" ref={inputEmail} className="form-control" placeholder="メールアドバイスを入力してください。"/>
+                                <input type="email" ref={inputEmail} className="form-control" placeholder="メールアドバイスを入力してください。" />
                                 <button className="btn btn-outline-secondary" type="button" onClick={sendMail} id="button-addon2">認証コード転送</button>
                             </div>
                         </div>

@@ -23,7 +23,6 @@ function Sell(props) {
         file2: "./cardImg.svg"
     });
 
-
     function searchPost() {
 
         //우편번호길이체크
@@ -93,30 +92,38 @@ function Sell(props) {
 
     //이미지를 임시폴더에 업로드
     function imageUpload(e) {
-        debugger
-        const formData = new FormData();
+        const formData = new FormData();//ajax등의 통신에서 form형태의 데이터전송이 가능하게함. append를 이용해서 key,value로 등록
         formData.append(
-            "uploadImages",
+            "imageFile",
             e.target.files[0]
         );
         
-        axios.post(`${props.state.rootUrl}/sell-data/imageUploadTemp`, {
-            data: formData,
-            headers: {
-                "Content-Type": "multipart/form-data"
-            }
-            }, { withCredentials: true })
+        //axios api참고.. axios.post(url,{data},{config})..  formData는 예외적으로 axios.post(url,formData,{config})
+        axios.post(`${props.state.rootUrl}/sell-data/imageUploadTemp`, 
+             formData,
+            { 
+                headers: {"Content-Type": "multipart/form-data"},
+                withCredentials: true 
+            })
             .then((result) => {
                 if (result.status == 200) {
-
+                    debugger
+                    setInitVal({
+                        file1: "../../server/temp/"+result.data.fileName,
+                    });
+                
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'お知らせ',
+                        text: result.data.message,
+                    })
                 }
             })
             .catch((result) => {
-                debugger
                 Swal.fire({
                     icon: 'warning',
                     title: 'お知らせ',
-                    text: '',
+                    text: result.response.data.message,
                 })
             })
     }
@@ -220,6 +227,7 @@ function Sell(props) {
                                             custom
                                             name="file1"
                                             onChange={imageUpload}
+                                            accept="image/*"
                                         />
                                     </Form.Group>
                                     <div className="text-center">
@@ -233,9 +241,10 @@ function Sell(props) {
                                             id="custom-file"
                                             label="メイン写真を選択してください"
                                             data-browse="選択"
-                                            name="file2"
-                                            onChange={handleInputChange}
                                             custom
+                                            name="file2"
+                                            onChange={imageUpload}
+                                            accept="image/*"
                                         />
                                     </Form.Group>
                                     <div className="text-center">

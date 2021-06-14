@@ -1,3 +1,4 @@
 view/src/key.js
 server/key.ini
 server/nohup.out
+server/temp/*
