@@ -10,6 +10,8 @@ import Swal from 'sweetalert2'
 function Sell(props) {
 
     const codeItems = {};
+    let [codeR, codeRUpd] = useState([])
+    let [codeM, codeMUpd] = useState([])
 
     //코드초기화
     useEffect(() => {
@@ -21,29 +23,22 @@ function Sell(props) {
             },withCredentials: true
         })
         .then((result) => {
-            debugger
             if (result.status == 200) {
                 result.data.forEach((codeArr,i) => {
                     codeItems[searchCode[i]]=[]
-                    codeArr.forEach((code,idx)=>{
-                        debugger
-                        codeItems[searchCode[idx]].push(<option>code</option>)
+                    codeArr.forEach((elem,idx)=>{
+                        codeItems[searchCode[i]].push(<option value={elem['code']}>{elem['name']}</option>)
                     })
                 });
-                // for (let number = 1; number <= 5; number++) {
-                //     items.push(
-                //         <Pagination.Item key={number} active={number === active}>
-                //             {number}
-                //         </Pagination.Item>
-                //     );
-                // }
+                codeRUpd(codeItems['R'])
+                codeMUpd(codeItems['M'])
                 debugger
             }
         }).catch((result) => {
             debugger
             console.log(result.response.data.message)
         })
-    })
+    },[])
 
 
     const btnSearchPost = useRef(false)
@@ -200,10 +195,9 @@ function Sell(props) {
                                     <Form.Group>
                                         <Form.Label>建物種別</Form.Label>
                                         <Form.Control as="select" custom name="houseType1" onChange={handleInputChange}>
-                                            <option>マンション</option>
-                                            <option>アパート</option>
-                                            <option>一戸建て</option>
-                                            <option>その他</option>
+                                            {codeR.map((e, i) => {
+                                                return (e)
+                                            })}
                                         </Form.Control>
                                     </Form.Group>
                                 </Col>
@@ -211,13 +205,9 @@ function Sell(props) {
                                     <Form.Group>
                                         <Form.Label>間取りタイプ</Form.Label>
                                         <Form.Control as="select" name="houseType2" onChange={handleInputChange}>
-                                            <option>ワンルーム</option>
-                                            <option>1K</option>
-                                            <option>1DK</option>
-                                            <option>1LDK</option>
-                                            <option>2K</option>
-                                            <option>2DK</option>
-                                            <option>2LDK</option>
+                                            {codeM.map((e, i) => {
+                                                return (e)
+                                            })}
                                         </Form.Control>
                                     </Form.Group>
                                 </Col>
