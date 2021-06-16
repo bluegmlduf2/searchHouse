@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import react, { useState, useRef } from 'react';//export Default된 항목은 {}없이 받음
+import react, { useState, useRef,useEffect } from 'react';//export Default된 항목은 {}없이 받음
 import { Row, Col, InputGroup, FormControl, Button, Form, Pagination, Image, Tabs, Tab, ButtonGroup } from 'react-bootstrap'; // npm install react-bootstrap bootstrap
 import { keys } from '../../key.js'
 import axios from 'axios'
@@ -8,6 +8,44 @@ import Swal from 'sweetalert2'
 
 
 function Sell(props) {
+
+    const codeItems = {};
+
+    //코드초기화
+    useEffect(() => {
+        const searchCode=["R","M"]
+
+        axios.post(`${props.state.rootUrl}/common-data/code`,searchCode, {
+            headers: {
+                "Content-Type": "application/json"
+            },withCredentials: true
+        })
+        .then((result) => {
+            debugger
+            if (result.status == 200) {
+                result.data.forEach((codeArr,i) => {
+                    codeItems[searchCode[i]]=[]
+                    codeArr.forEach((code,idx)=>{
+                        debugger
+                        codeItems[searchCode[idx]].push(<option>code</option>)
+                    })
+                });
+                // for (let number = 1; number <= 5; number++) {
+                //     items.push(
+                //         <Pagination.Item key={number} active={number === active}>
+                //             {number}
+                //         </Pagination.Item>
+                //     );
+                // }
+                debugger
+            }
+        }).catch((result) => {
+            debugger
+            console.log(result.response.data.message)
+        })
+    })
+
+
     const btnSearchPost = useRef(false)
 
     const [initVal, setInitVal] = useState({
@@ -19,8 +57,13 @@ function Sell(props) {
         city3: "",
         title: "",
         content: "",
-        file1: "./cardImg.svg",
-        file2: "./cardImg.svg"
+        fileNm1: "",
+        fileNm2: ""
+    });
+
+    const [tempImg, setTempImg] = useState({
+        fileTemp1: "./cardImg.svg",
+        fileTemp2: "./cardImg.svg"
     });
 
     function searchPost() {
@@ -41,7 +84,6 @@ function Sell(props) {
             "Content-Type": "application/json"
         }})
         .then((result) => {
-            debugger
             //상태가 200정상이고 검색결과가 있는경우
             if (result.status == 200 && result.data.status=="OK") {
                 let addrArr=result.data.results[0].address_components //주소결과
@@ -71,7 +113,7 @@ function Sell(props) {
                     title: 'お知らせ',
                     text: `有効な郵便番号ではありません。`,
                 })
-                debugger
+
                 document.querySelector(".post").value=""
                 document.querySelector(".city1").value=""
                 document.querySelector(".city2").value=""
@@ -81,7 +123,6 @@ function Sell(props) {
             }
         })
         .catch((result) => {
-            debugger
             Swal.fire({
                 icon: 'warning',
                 title: 'お知らせ',
@@ -107,9 +148,19 @@ function Sell(props) {
             })
             .then((result) => {
                 if (result.status == 200) {
-                    debugger
+                    let lastNum=e.target.name.slice(-1)
+                    
+                    //자바스크립트객체의 키값의 동적할당은 []를 사용한다
+                    //파일명
                     setInitVal({
-                        file1: "../../server/temp/"+result.data.fileName,
+                        ...initVal,
+                        ["fileNm"+lastNum]: result.data.fileNm,
+                    });
+
+                    //임시저장의 파일의 base64이미지
+                    setTempImg({
+                        ...tempImg,
+                        ["fileTemp"+lastNum]: "data:image/jpeg;base64, "+result.data.fileBase64,
                     });
                 
                     Swal.fire({
@@ -225,13 +276,13 @@ function Sell(props) {
                                             label="メイン写真を選択してください"
                                             data-browse="選択"
                                             custom
-                                            name="file1"
+                                            name="fileNm1"
                                             onChange={imageUpload}
                                             accept="image/*"
                                         />
                                     </Form.Group>
                                     <div className="text-center">
-                                        <Image src={initVal.file1} xs={12} md={6} thumbnail />
+                                        <Image src={tempImg.fileTemp1} xs={12} md={6} thumbnail />
                                     </div>
                                 </Col>
                                 <Col md="6">
@@ -242,13 +293,13 @@ function Sell(props) {
                                             label="メイン写真を選択してください"
                                             data-browse="選択"
                                             custom
-                                            name="file2"
+                                            name="fileNm2"
                                             onChange={imageUpload}
                                             accept="image/*"
                                         />
                                     </Form.Group>
                                     <div className="text-center">
-                                        <Image src={initVal.file2} xs={12} md={6} thumbnail />
+                                        <Image src={tempImg.fileTemp2} xs={12} md={6} thumbnail />
                                     </div>
                                 </Col>
                             </Row>

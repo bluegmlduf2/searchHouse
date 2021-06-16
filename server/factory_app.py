@@ -11,6 +11,7 @@ from controller import chart
 from controller import signup
 from controller import signin
 from controller import sell
+from controller import common
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 import configparser#환경설정파일parser
@@ -58,6 +59,7 @@ def create_app(config_mode="test"):
     app.register_blueprint(signup.signup_ab, url_prefix='/signup-data')
     app.register_blueprint(signin.signin_ab, url_prefix='/signin-data')
     app.register_blueprint(sell.sell_ab, url_prefix='/sell-data')
+    app.register_blueprint(common.common_ab, url_prefix='/common-data')
 
     return app
 

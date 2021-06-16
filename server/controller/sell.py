@@ -4,16 +4,20 @@ from common import *  # 공통
 import random
 from datetime import datetime
 from PIL import Image#이미지사이즈변경 pip install image
+import shutil
+import base64
+import os.path
 
 sell_ab = Blueprint('sell_ab', __name__)
 
 @sell_ab.route('/imageUploadTemp', methods=['POST'])
 def imageUploadTemp():
     '''이미지업로드'''
-    try:
-        if request.method == 'POST':
-            f = request.files['imageFile']
+    if request.method == 'POST':
+        try:
             
+            f = request.files['imageFile']
+
             if f.filename=='':
                 raise UserError('ファイルアップロード失敗しました。')
             
@@ -26,12 +30,22 @@ def imageUploadTemp():
             image = Image.open(f)
             resize_image = image.resize((286,180))#286,180사이즈변경
             
+            source=current_app.root_path+'/temp/'+resize_image_fileNm#임시파일저장경로
+            # dest =current_app.root_path+"/saveImage/"+resize_image_fileNm#최종저장경로
+
             #저장할 경로 + 파일명
-            resize_image.save(current_app.root_path+'/temp/' + resize_image_fileNm)
-    except UserError as e:
-        return json.dumps({'status': False, 'message': e.msg}), 400
-    except Exception as e:
-        traceback.print_exc()
-        return jsonify({"message": "システムエラー", }), 400
-    else:
-        return jsonify ({ "message": "イメージを登録しました。","fileName":resize_image_fileNm}), 200
+            resize_image.save(source)
+
+            # 파일이동
+            # savedImageFile=shutil.move(source,dest)
+            
+            #이미지->바이너리(base64)->utf-8문자열
+            with open(source, "rb") as image_file:
+                data = base64.b64encode(image_file.read())
+        except UserError as e:
+            return json.dumps({'status': False, 'message': e.msg}), 400
+        except Exception as e:
+            traceback.print_exc()
+            return jsonify({"message": "システムエラー", }), 400
+        else:
+            return jsonify ({ "message": "イメージを登録しました。","fileNm":resize_image_fileNm,"fileBase64":data.decode('utf-8')}), 200
