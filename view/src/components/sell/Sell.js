@@ -10,8 +10,8 @@ import Swal from 'sweetalert2'
 function Sell(props) {
 
     const codeItems = {};
-    let [codeR, codeRUpd] = useState([])
-    let [codeM, codeMUpd] = useState([])
+    let [codeR, codeRUpd] = useState([])//건물종별 초기화
+    let [codeM, codeMUpd] = useState([])//방타입 초가화
 
     //코드초기화
     useEffect(() => {
@@ -32,17 +32,22 @@ function Sell(props) {
                 });
                 codeRUpd(codeItems['R'])
                 codeMUpd(codeItems['M'])
-                debugger
+                
+                //리액트 파라미터에 값을 넣어줌
+                setInitVal({
+                    ...initVal,
+                    ["houseType1"]: codeItems['R'][0].props.value,
+                    ["houseType2"]: codeItems['M'][0].props.value
+                })
             }
         }).catch((result) => {
-            debugger
             console.log(result.response.data.message)
         })
     },[])
 
 
     const btnSearchPost = useRef(false)
-
+    
     const [initVal, setInitVal] = useState({
         houseType1: "",
         houseType2: "",
@@ -53,7 +58,8 @@ function Sell(props) {
         title: "",
         content: "",
         fileNm1: "",
-        fileNm2: ""
+        fileNm2: "",
+        lat: "",
     });
 
     const [tempImg, setTempImg] = useState({
@@ -83,19 +89,29 @@ function Sell(props) {
             if (result.status == 200 && result.data.status=="OK") {
                 let addrArr=result.data.results[0].address_components //주소결과
                 let latArr=result.data.results[0].geometry.location.lat //위도경로결과
-
+                let city1=""
+                let city2=""
+                
                 //첫번째 우편번호 마지막 국가명은 필요없다(i>0,-2)
-                for (let i = addrArr.length-2; i > 0; i--) {   
+                for (let i = addrArr.length-2; i > 0; i--) {
                     //도도후현
                     if(i==addrArr.length-2){
-                        document.querySelector(".city1").value=addrArr[i].long_name
+                        city1=addrArr[i].long_name
                         continue
                     }
 
                     //주소
-                    let city2=document.querySelector(".city2");
-                    city2.value+=' '+addrArr[i].long_name
+                    city2+=' '+addrArr[i].long_name
                 }
+
+                //리액트 파라메터에 값을 초기화
+                setInitVal({
+                    ...initVal,
+                    ["city1"]: city1,
+                    ["city2"]: city2,
+                    ["lat"]: latArr,
+                })
+
                 Swal.fire({
                     icon: 'success',
                     title: 'お知らせ',
@@ -128,6 +144,11 @@ function Sell(props) {
 
     //이미지를 임시폴더에 업로드
     function imageUpload(e) {
+        //취소버튼눌렀을때 처리
+        if (!e.target.value) {
+            return
+        }
+
         const formData = new FormData();//ajax등의 통신에서 form형태의 데이터전송이 가능하게함. append를 이용해서 key,value로 등록
         formData.append(
             "imageFile",
@@ -173,6 +194,79 @@ function Sell(props) {
                 })
             })
     }
+
+    //방 등록버튼
+    const registerRoom = () => {
+        let nullList = [];
+
+        //널체크
+        const chkList=["郵便番号", "都道府県", "市区町村・番地", "建物名・部屋番号", "タイトル", "コンテンツ", "メインイメージ", "イメージ"];
+
+        //널체크
+        for (let index = 0; index < chkList.length; index++) {
+            if (!Object.values(initVal)[index+1]) {
+                nullList.push(chkList[index])
+            }
+        }
+        
+        //널체크
+        if (nullList.length > 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'お知らせ',
+                text: `[ ${nullList.join(" , ")} ] を入力してください。`,
+            })
+            return
+        }
+
+        //리액트 파라메터에 값을 초기화
+        setInitVal({
+            ...initVal,
+            ["fileTemp1"]: tempImg['fileTemp1'],
+            ["fileTemp2"]: tempImg['fileTemp2'],
+            ["userId"]: props.state.id
+        })
+
+        //1.널체크잘되는지확인
+        //2.파일경로인풋태그에 안들어감..
+        debugger
+        alert(11)
+        // //통신
+        // axios.post(`${props.state.rootUrl}/signin-data/login`, { data: initVal }, {
+        //     headers: {"Content-Type": "application/json"}
+        //     , withCredentials: true
+        // })
+        //     .then((result) => {
+        //         if (result.status == 200) {
+        //             //ID 리덕스에 추가
+        //             props.dispatch({ type: 'addId', idLoad: result.data['id'] })
+
+        //             //토큰을 로컬스토리지에 저장
+        //             if (result.data['token']) {
+        //                 localStorage.setItem('token', result.data['token'])
+        //             }
+
+        //             //홈이동
+        //             history.push('/');
+
+        //             Swal.fire({
+        //                 icon: 'success',
+        //                 title: 'お知らせ',
+        //                 text: result.data['id'] + ' 様ようこそ！',
+        //                 showConfirmButton: false,
+        //                 timer: 1500
+        //             })
+        //         }
+        //     })
+        //     .catch((result) => {
+        //         Swal.fire({
+        //             icon: 'warning',
+        //             title: 'お知らせ',
+        //             text: result.response.data.message,
+        //         })
+        //     })
+    }
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -227,13 +321,13 @@ function Sell(props) {
                                 <Col md="6">
                                     <Form.Group>
                                         <Form.Label>都道府県</Form.Label>
-                                        <Form.Control type="text" className="city1" name="city1" onChange={handleInputChange} placeholder="東京都" readOnly/>
+                                        <Form.Control type="text" className="city1" name="city1" onChange={handleInputChange} value={initVal.city1} placeholder="東京都" readOnly/>
                                     </Form.Group>
                                 </Col>
                                 <Col md="6">
                                     <Form.Group>
                                         <Form.Label>市区町村・番地</Form.Label>
-                                        <Form.Control type="text" className="city2" name="city2" onChange={handleInputChange} placeholder="港区芝公園４丁目２−8" />
+                                        <Form.Control type="text" className="city2" name="city2" onChange={handleInputChange} value={initVal.city2} placeholder="港区芝公園４丁目２−8" />
                                     </Form.Group>
                                 </Col>
                                 <Col md="12">
@@ -286,6 +380,7 @@ function Sell(props) {
                                             name="fileNm2"
                                             onChange={imageUpload}
                                             accept="image/*"
+                                            // value={tempImg.fileTemp2}
                                         />
                                     </Form.Group>
                                     <div className="text-center">
@@ -293,7 +388,7 @@ function Sell(props) {
                                     </div>
                                 </Col>
                             </Row>
-                            <Button variant="secondary" style={{ margin: "20px 0" }} type="submit" size="lg" block>登録</Button>
+                            <Button variant="secondary" style={{ margin: "20px 0" }} onClick={registerRoom} type="button" size="lg" block>登録</Button>
                         </Form>
                     </Tab>
                     <Tab eventKey="listTab" title="登録した部屋">
