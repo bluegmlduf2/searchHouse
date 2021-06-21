@@ -62,6 +62,11 @@ function Sell(props) {
         lat: "",
     });
 
+    const [orgImg, setOrgImg] = useState({
+        fileNm1: "メイン写真を選択してください",
+        fileNm2: "写真を選択してください"
+    });
+
     const [tempImg, setTempImg] = useState({
         fileTemp1: "./cardImg.svg",
         fileTemp2: "./cardImg.svg"
@@ -166,12 +171,19 @@ function Sell(props) {
                 if (result.status == 200) {
                     let lastNum=e.target.name.slice(-1)
                     
+                    
                     //자바스크립트객체의 키값의 동적할당은 []를 사용한다
                     //파일명
                     setInitVal({
                         ...initVal,
                         ["fileNm"+lastNum]: result.data.fileNm,
                     });
+                    debugger
+                    //파일원본명
+                    setOrgImg({
+                        ...orgImg,
+                        ["fileNm"+lastNum]: e.target.files[0].name
+                    })
 
                     //임시저장의 파일의 base64이미지
                     setTempImg({
@@ -198,23 +210,24 @@ function Sell(props) {
     //방 등록버튼
     const registerRoom = () => {
         let nullList = [];
+        let idx=0;
 
         //널체크
-        const chkList=["郵便番号", "都道府県", "市区町村・番地", "建物名・部屋番号", "タイトル", "コンテンツ", "メインイメージ", "イメージ"];
-
-        //널체크
-        for (let index = 0; index < chkList.length; index++) {
-            if (!Object.values(initVal)[index+1]) {
-                nullList.push(chkList[index])
+        Object.entries(initVal).forEach((e,i) => {
+            let chkLabel=["郵便番号","都道府県", "市区町村・番地", "建物名・部屋番号","タイトル","コンテンツ","メインイメージ"];
+            let chkArr=["post","city1","city2","city3","title","content",,"fileNm1"]
+            //include함수사용해서 포함여부체크 && 해당값이 공백인경우
+            if(chkArr.includes(e[0])&&!e[1]){
+                nullList.push(chkLabel[idx])
             }
-        }
+        });
         
         //널체크
         if (nullList.length > 0) {
             Swal.fire({
                 icon: 'warning',
                 title: 'お知らせ',
-                text: `[ ${nullList.join(" , ")} ] を入力してください。`,
+                text: `全項目をを入力してください。`,
             })
             return
         }
@@ -227,8 +240,6 @@ function Sell(props) {
             ["userId"]: props.state.id
         })
 
-        //1.널체크잘되는지확인
-        //2.파일경로인풋태그에 안들어감..
         debugger
         alert(11)
         // //통신
@@ -357,7 +368,7 @@ function Sell(props) {
                                         <Form.Label>メインイメージ</Form.Label>
                                         <Form.File
                                             id="custom-file"
-                                            label="メイン写真を選択してください"
+                                            label={orgImg.fileNm1}
                                             data-browse="選択"
                                             custom
                                             name="fileNm1"
@@ -374,7 +385,7 @@ function Sell(props) {
                                         <Form.Label>イメージ</Form.Label>
                                         <Form.File
                                             id="custom-file"
-                                            label="メイン写真を選択してください"
+                                            label={orgImg.fileNm2}
                                             data-browse="選択"
                                             custom
                                             name="fileNm2"
