@@ -21,7 +21,7 @@ def insertRoom(args):
         except Exception as e:
             traceback.print_exc()
             conn.rollback()
-            return json.dumps({'message': '관리자에게 문의해주세요.'}), 400
+            raise e
         else:
             conn.commit()
             return json.dumps({'status': True, 'message': reMsg}), 200

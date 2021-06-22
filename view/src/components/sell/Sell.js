@@ -60,6 +60,7 @@ function Sell(props) {
         fileNm1: "",
         fileNm2: "",
         lat: "",
+        lng: ""
     });
 
     const [orgImg, setOrgImg] = useState({
@@ -94,6 +95,7 @@ function Sell(props) {
             if (result.status == 200 && result.data.status=="OK") {
                 let addrArr=result.data.results[0].address_components //주소결과
                 let latArr=result.data.results[0].geometry.location.lat //위도경로결과
+                let lngArr=result.data.results[0].geometry.location.lng //위도경로결과
                 let city1=""
                 let city2=""
                 
@@ -108,13 +110,14 @@ function Sell(props) {
                     //주소
                     city2+=' '+addrArr[i].long_name
                 }
-
+debugger
                 //리액트 파라메터에 값을 초기화
                 setInitVal({
                     ...initVal,
                     ["city1"]: city1,
                     ["city2"]: city2,
                     ["lat"]: latArr,
+                    ["lng"]: lngArr,
                 })
 
                 Swal.fire({

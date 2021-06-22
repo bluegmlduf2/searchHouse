@@ -36,13 +36,11 @@ def imageUploadTemp():
 
             #저장할 경로 + 파일명
             resize_image.save(source)
-
-            # 파일이동
-            # savedImageFile=shutil.move(source,dest)
             
             #이미지->바이너리(base64)->utf-8문자열
             with open(source, "rb") as image_file:
                 data = base64.b64encode(image_file.read())
+                
         except UserError as e:
             return json.dumps({'status': False, 'message': e.msg}), 400
         except Exception as e:
