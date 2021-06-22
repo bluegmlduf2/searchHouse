@@ -178,7 +178,7 @@ function Sell(props) {
                         ...initVal,
                         ["fileNm"+lastNum]: result.data.fileNm,
                     });
-                    debugger
+                    
                     //파일원본명
                     setOrgImg({
                         ...orgImg,
@@ -214,8 +214,8 @@ function Sell(props) {
 
         //널체크
         Object.entries(initVal).forEach((e,i) => {
-            let chkLabel=["郵便番号","都道府県", "市区町村・番地", "建物名・部屋番号","タイトル","コンテンツ","メインイメージ"];
-            let chkArr=["post","city1","city2","city3","title","content",,"fileNm1"]
+            let chkLabel=["郵便番号","都道府県", "市区町村・番地", "建物名・部屋番号","タイトル","コンテンツ","メインイメージ","イメージ"];
+            let chkArr=["post","city1","city2","city3","title","content","fileNm1","fileNm2"]
             //include함수사용해서 포함여부체크 && 해당값이 공백인경우
             if(chkArr.includes(e[0])&&!e[1]){
                 nullList.push(chkLabel[idx])
@@ -240,42 +240,31 @@ function Sell(props) {
             ["userId"]: props.state.id
         })
 
-        debugger
-        alert(11)
-        // //통신
-        // axios.post(`${props.state.rootUrl}/signin-data/login`, { data: initVal }, {
-        //     headers: {"Content-Type": "application/json"}
-        //     , withCredentials: true
-        // })
-        //     .then((result) => {
-        //         if (result.status == 200) {
-        //             //ID 리덕스에 추가
-        //             props.dispatch({ type: 'addId', idLoad: result.data['id'] })
+        //통신
+        axios.put(`${props.state.rootUrl}/sell-data/insertRoom`, { data: initVal }, {
+            headers: {"Content-Type": "application/json"}
+            , withCredentials: true
+        })
+            .then((result) => {
+                if (result.status == 200) {
+                    debugger
 
-        //             //토큰을 로컬스토리지에 저장
-        //             if (result.data['token']) {
-        //                 localStorage.setItem('token', result.data['token'])
-        //             }
-
-        //             //홈이동
-        //             history.push('/');
-
-        //             Swal.fire({
-        //                 icon: 'success',
-        //                 title: 'お知らせ',
-        //                 text: result.data['id'] + ' 様ようこそ！',
-        //                 showConfirmButton: false,
-        //                 timer: 1500
-        //             })
-        //         }
-        //     })
-        //     .catch((result) => {
-        //         Swal.fire({
-        //             icon: 'warning',
-        //             title: 'お知らせ',
-        //             text: result.response.data.message,
-        //         })
-        //     })
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'お知らせ',
+                        text: result.data['id'] + ' 様ようこそ！',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+            .catch((result) => {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'お知らせ',
+                    text: result.response.data.message,
+                })
+            })
     }
 
 
