@@ -3,15 +3,11 @@ Flask설정
 '''
 from flask import Flask, render_template, request, redirect, url_for, Blueprint,session
 import traceback
-from controller import table 
-from controller import order 
-from controller import pay
-from controller import resv
-from controller import chart
 from controller import signup
 from controller import signin
 from controller import sell
 from controller import common
+from controller import main
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 import configparser#환경설정파일parser
@@ -51,15 +47,11 @@ def create_app(config_mode="test"):
     # supports_credentials :사용자가 인증된 요청을 할수있게함(쿠키,세션)
 
     #매개변수로 bluePrint객체를 받는다. 그러나 import해서 해당 컨트롤러에 blueprint객체를 가져와서 사용
-    app.register_blueprint(table.table_ab, url_prefix='/table')
-    app.register_blueprint(order.order_ab, url_prefix='/order')
-    app.register_blueprint(pay.pay_ab, url_prefix='/pay')
-    app.register_blueprint(resv.resv_ab, url_prefix='/resv')
-    app.register_blueprint(chart.chart_ab, url_prefix='/chart')
     app.register_blueprint(signup.signup_ab, url_prefix='/signup-data')
     app.register_blueprint(signin.signin_ab, url_prefix='/signin-data')
     app.register_blueprint(sell.sell_ab, url_prefix='/sell-data')
     app.register_blueprint(common.common_ab, url_prefix='/common-data')
+    app.register_blueprint(main.main_ab, url_prefix='/main-data')
 
     return app
 

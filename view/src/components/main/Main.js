@@ -1,10 +1,30 @@
 /*eslint-disable*/
-import react, { useState } from 'react';
+import react, { useState,useEffect } from 'react';
 import { Row, Col, Card, CardDeck, Form } from 'react-bootstrap'; // npm install react-bootstrap bootstrap
 import { Link } from 'react-router-dom' /* 라우터 초기 설정 */
+import axios from 'axios'
+import Swal from 'sweetalert2'
+import { connect } from 'react-redux';
 
-function Main() {
-    let [roomInfo, roomUpd] = useState([1, 4, 5, 6])
+
+function Main(props) {
+    let [roomInfo, roomUpd] = useState([])
+    
+    //메인에표시할방정보가져오기
+    useEffect(() => {
+        axios.post(`${props.state.rootUrl}/main-data/getRooms`,{}, {
+            headers: {
+                "Content-Type": "application/json"
+            },withCredentials: true
+        })
+        .then((result) => {
+            if (result.status == 200) {
+                roomUpd(result.data)
+            }
+        }).catch((result) => {
+            console.log(result.response.data.message)
+        })
+    },[])
     
     return (
         <div>
@@ -35,17 +55,11 @@ function Main() {
                                 <Col md="3" className="mb-4">
                                     <Link to="#">
                                         <Card>
-                                            <Card.Img variant="top" src="./cardImg.svg" width="286px" height="220px" />
+                                            <Card.Img variant="top" src={e['fileNm1']} width="286px" height="220px" style={{borderRadius: '9px'}}/>
                                             <Card.Body>
-                                                <span>
-                                                    2LDK～4LDK
-                                                </span>
-                                                <Card.Title><h4><b>6066万円～8983万円</b></h4></Card.Title>
-                                                <Card.Text>
-                                                    ■中心部に位置しながら歴史と緑が色濃く残る、平尾山荘・浄水エリア。 <br />
-                                                    ■多くの自然に包まれ、ゆったりと時間が流れる閑静な住宅街。<br />
-                                                    ■都心に近く、優雅な暮らしに彩りを添える豊富な利便施設が整っています。
-                                                </Card.Text>
+                                                <span>{e['houseType1']} / {e['houseType2']}</span>
+                                                <Card.Title><h4><b>{e['title']}</b></h4></Card.Title>
+                                                <Card.Text>{e['content']}</Card.Text>
                                             </Card.Body>
                                         </Card>
                                     </Link>
@@ -59,4 +73,14 @@ function Main() {
     );
 }
 
-export default Main;
+
+// 리덕스에서 설정한 값을 세팅해주는 함수 (redux->state->props)
+function reduxStateToProps(state) {
+    //index.js에서 설정한 store(state)통채로 가져와서 Nav(props)함수의 props로 던짐 
+    return {
+        state: state.reducer
+    }
+}
+
+
+export default connect(reduxStateToProps)(Main);

@@ -79,7 +79,7 @@ function Nav(props){
             </Col>
             {props.state.id?
             <Col md="2">
-                <Link to="/like" className={"btn "+navFont}>お気に入り</Link>
+                {/* <Link to="/like" className={"btn "+navFont}>お気に入り</Link> */}
             </Col>
             :null}
             {props.state.id?

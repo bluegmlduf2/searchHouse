@@ -1,5 +1,6 @@
 /*eslint-disable*/
 import react, { useState, useRef,useEffect } from 'react';//export Default된 항목은 {}없이 받음
+import {useHistory} from 'react-router-dom' 
 import { Row, Col, InputGroup, FormControl, Button, Form, Pagination, Image, Tabs, Tab, ButtonGroup } from 'react-bootstrap'; // npm install react-bootstrap bootstrap
 import { keys } from '../../key.js'
 import axios from 'axios'
@@ -8,10 +9,56 @@ import Swal from 'sweetalert2'
 
 
 function Sell(props) {
-
     const codeItems = {};
-    let [codeR, codeRUpd] = useState([])//건물종별 초기화
-    let [codeM, codeMUpd] = useState([])//방타입 초가화
+    const [codeR, codeRUpd] = useState([])//건물종별 초기화
+    const [codeM, codeMUpd] = useState([])//방타입 초가화
+    const [showTabStatus, showTabStatusUpd] = useState('regSell')//초기화면
+    const btnSearchPost = useRef(false)
+    const history = useHistory();//페이지이동라우터 초기화
+
+    //방등록정보
+    const [initVal, setInitVal] = useState({
+        houseType1: "",
+        houseType2: "",
+        post: "",
+        city1: "",
+        city2: "",
+        city3: "",
+        title: "",
+        content: "",
+        fileNm1: "",
+        fileNm2: "",
+        lat: "",
+        lng: "",
+        userId:""
+    });
+
+    //방조회정보
+    const [initRoomVal, setInitRootVal] = useState({
+        roomId:"",
+        houseType1: "",
+        houseType2: "",
+        post: "",
+        city1: "",
+        city2: "",
+        city3: "",
+        title: "",
+        content: "",
+        fileNm1: "./cardImg.svg",
+        fileNm2: "./cardImg.svg",
+        regDate:"　",
+        adStatus:""
+    });
+
+    const [orgImg, setOrgImg] = useState({
+        fileNm1: "メイン写真を選択してください",
+        fileNm2: "写真を選択してください"
+    });
+
+    const [tempImg, setTempImg] = useState({
+        fileTemp1: "./cardImg.svg",
+        fileTemp2: "./cardImg.svg"
+    });
 
     //코드초기화
     useEffect(() => {
@@ -45,33 +92,25 @@ function Sell(props) {
         })
     },[])
 
+    //방정보 조회
+    function getRoom(param) {
+        //해당탭클릭시만조회
+        if(param!="listTab")return
 
-    const btnSearchPost = useRef(false)
-    
-    const [initVal, setInitVal] = useState({
-        houseType1: "",
-        houseType2: "",
-        post: "",
-        city1: "",
-        city2: "",
-        city3: "",
-        title: "",
-        content: "",
-        fileNm1: "",
-        fileNm2: "",
-        lat: "",
-        lng: ""
-    });
+        axios.post(`${props.state.rootUrl}/sell-data/getRoom`,{ data: {"userId":props.state.id} }, {
+            headers: {
+                "Content-Type": "application/json"
+            },withCredentials: true
+        })
+        .then((result) => {
+            if (result.status == 200) {
+                setInitRootVal(result.data[0])
+            }
+        }).catch((result) => {
+            console.log(result.response.data.message)
+        })
+    }
 
-    const [orgImg, setOrgImg] = useState({
-        fileNm1: "メイン写真を選択してください",
-        fileNm2: "写真を選択してください"
-    });
-
-    const [tempImg, setTempImg] = useState({
-        fileTemp1: "./cardImg.svg",
-        fileTemp2: "./cardImg.svg"
-    });
 
     function searchPost() {
 
@@ -110,7 +149,7 @@ function Sell(props) {
                     //주소
                     city2+=' '+addrArr[i].long_name
                 }
-debugger
+
                 //리액트 파라메터에 값을 초기화
                 setInitVal({
                     ...initVal,
@@ -174,7 +213,6 @@ debugger
                 if (result.status == 200) {
                     let lastNum=e.target.name.slice(-1)
                     
-                    
                     //자바스크립트객체의 키값의 동적할당은 []를 사용한다
                     //파일명
                     setInitVal({
@@ -235,14 +273,9 @@ debugger
             return
         }
 
-        //리액트 파라메터에 값을 초기화
-        setInitVal({
-            ...initVal,
-            ["fileTemp1"]: tempImg['fileTemp1'],
-            ["fileTemp2"]: tempImg['fileTemp2'],
-            ["userId"]: props.state.id
-        })
-
+        //회원 아이디를 넣음
+        initVal["userId"]=props.state.id
+        
         //통신
         axios.put(`${props.state.rootUrl}/sell-data/insertRoom`, { data: initVal }, {
             headers: {"Content-Type": "application/json"}
@@ -250,12 +283,13 @@ debugger
         })
             .then((result) => {
                 if (result.status == 200) {
-                    debugger
+                    history.push('/');
+                    // showTabStatusUpd('listTab')
 
                     Swal.fire({
                         icon: 'success',
                         title: 'お知らせ',
-                        text: result.data['id'] + ' 様ようこそ！',
+                        text: result.data.message,
                         showConfirmButton: false,
                         timer: 1500
                     })
@@ -283,7 +317,7 @@ debugger
     return (
         <Row className="sell justify-content-center">
             <Col md="7">
-                <Tabs defaultActiveKey="regSell" id="uncontrolled-tab-example">
+                <Tabs defaultActiveKey={showTabStatus} id="uncontrolled-tab-example" onSelect={getRoom}>
                     <Tab eventKey="regSell" title="登録">
                         <Form>
                             <Row className="sell1">
@@ -357,7 +391,7 @@ debugger
                             <Row className="sell4" >
                                 <Col md="6" >
                                     <Form.Group>
-                                        <Form.Label>メインイメージ</Form.Label>
+                                        <Form.Label>外観写真</Form.Label>
                                         <Form.File
                                             id="custom-file"
                                             label={orgImg.fileNm1}
@@ -374,7 +408,7 @@ debugger
                                 </Col>
                                 <Col md="6">
                                     <Form.Group>
-                                        <Form.Label>イメージ</Form.Label>
+                                        <Form.Label>部屋写真</Form.Label>
                                         <Form.File
                                             id="custom-file"
                                             label={orgImg.fileNm2}
@@ -383,7 +417,6 @@ debugger
                                             name="fileNm2"
                                             onChange={imageUpload}
                                             accept="image/*"
-                                            // value={tempImg.fileTemp2}
                                         />
                                     </Form.Group>
                                     <div className="text-center">
@@ -399,40 +432,40 @@ debugger
                         <Row>
                             <Col>
                                 <ul className="sellNotice">
-                                    <li>●　会員は1人一個</li>
-                                    <li>●　広告中：</li>
-                                    <li>●　完了：</li>
-                                    <li>●　違反：</li>
+                                    <li>●　広告中：…</li>
+                                    <li>●　完了：…</li>
+                                    <li>●　違反：…</li>
                                 </ul>
                             </Col>
                         </Row>
                         <h4>登録したお部屋</h4>
                         <Row className="sellRoom">
                             <Col md="2" className="sellRoom-title">
-                                <Row>11</Row>
-                                <Row style={{ color: "dodgerblue" }}>1111111111</Row>
+                                {/* <Row style={{ color: "dodgerblue" }}>登録番号</Row> */}
+                                <Row>登録番号：{initRoomVal.roomId}</Row>
+                                <Row>広告状態：{initRoomVal.adStatus=="1"?"広告中":"広告終了"}</Row>
                             </Col>
                             <Col md="4" className="sellRoom-content">
                                 <Row>
                                     <Col xs="6" style={{ lineHeight: "180px" }}>
-                                        <Image src="./cardImg.svg" width="160px" xs={12} thumbnail />
+                                        <Image src={initRoomVal.fileNm1} width="160px" xs={12} thumbnail />
                                     </Col>
-                                    <Col xs="6">
-                                        <Row>
-                                            <b>333333</b>
-                                        </Row>
-                                        <Row>
-                                            33333333333
-                                        </Row>
+                                    <Col xs="6" style={{ lineHeight: "180px" }}>
+                                        <Image src={initRoomVal.fileNm2} width="160px" xs={12} thumbnail />
                                     </Col>
                                 </Row>
                             </Col>
-                            <Col md="2" style={{ lineHeight: "180px" }} className="sellRoom-detail">
-                                33333333333333333333333333
+                            <Col md="2">
+                                <Row>
+                                    <b>{initRoomVal.title}</b>
+                                </Row>
+                                <Row>
+                                    {initRoomVal.content}
+                                </Row>
                             </Col>
                             <Col md="4" className="sellRoom-status">
-                                <Row>
-                                    44444444444444
+                                <Row style={{ textAlign: "center" }}>
+                                    　　　　　登録日 : {initRoomVal.regDate}
                                 </Row>
                                 <Row className="btn-center">
                                     <ButtonGroup>

@@ -54,15 +54,29 @@ def insertRoom():
     try:
         if request.method == 'PUT':
             args=request.get_json()['data']
+            
+            #파일존재유무체크
+            for i in range(1,3):
+                source=current_app.root_path+'/temp/'+args['fileNm'+str(i)]#임시파일저장경로
+                if os.path.isfile(source) == False:
+                    raise FileNotFoundError
+
+            '''유저아이디 획득'''
+            args['userId']=sell.getMemberId(args)
+            
+            '''등록한 방의 수 확인 '''
+            if sell.chekRegRoomCnt(args)>0:
+                raise UserError('一般顧客が登録できる物件は一件のみです。')
+
+            '''방정보입력'''
+            sell.insertRoom(args)
+
             #파일이동
             for i in range(1,3):
                 source=current_app.root_path+'/temp/'+args['fileNm'+str(i)]#임시파일저장경로
                 dest =current_app.root_path+"/saveImage/"+args['fileNm'+str(i)]#최종저장경로
-                savedImageFile=shutil.move(source,dest)# 파일이동
-                args['fileNm'+str(i)]=savedImageFile
+                shutil.move(source,dest)# 파일이동
 
-            '''방정보입력'''
-            sell.insertRoom(args)
 
     except UserError as e:
         return json.dumps({'status': False, 'message': e.msg}), 400
@@ -73,3 +87,33 @@ def insertRoom():
         return jsonify ({ "message": "システムエラー"}), 400
     else:
         return jsonify ({ "message": "お部屋情報を登録しました。"}), 200
+
+@sell_ab.route('/getRoom' ,methods=['POST'])
+def getRoom():
+    try:
+        if request.method == 'POST':
+            args=request.get_json()['data']
+
+            '''유저아이디 획득'''
+            args['userId']=sell.getMemberId(args)
+
+            '''방정보 가져오기'''
+            data=sell.getRoom(args)
+
+            '''이미지를 base64로변환'''
+            #이미지->바이너리(base64)->utf-8문자열
+            for i in range(1,3):
+                src =current_app.root_path+"/saveImage/"+data[0]['fileNm'+str(i)]
+                with open(src, "rb") as image_file:
+                    #b64encode함수는 바이트코드를만든다. decode는 문자열을 만든다.
+                    data[0]['fileNm'+str(i)]="data:image/jpeg;base64, "+base64.b64encode(image_file.read()).decode('utf-8')
+
+    except UserError as e:
+        return json.dumps({'status': False, 'message': e.msg}), 400
+    except FileNotFoundError:
+        return jsonify ({ "message": "アップロードするファイルが存在しません。"}), 400
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify ({ "message": "システムエラー"}), 400
+    else:
+        return jsonify (data), 200
