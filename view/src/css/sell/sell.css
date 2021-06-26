@@ -36,6 +36,12 @@
     justify-content: center;
 }
 
+.sellRoom .sellRoom-oneLine{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /*한줄일경우 */
+    white-space: nowrap;
+}
 @media(max-width:767px) {
     .footer{
         display: none;

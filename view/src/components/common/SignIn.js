@@ -59,7 +59,7 @@ function LoginForm(props) {
         }
 
         //암호화
-        setInitVal(initVal.pass = SHA256(initVal.pass))
+        initVal.pass = SHA256(initVal.pass)
 
         //통신
         axios.post(`${props.state.rootUrl}/signin-data/login`, { data: initVal }, {

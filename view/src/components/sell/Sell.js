@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import react, { useState, useRef,useEffect } from 'react';//export Default된 항목은 {}없이 받음
 import {useHistory} from 'react-router-dom' 
-import { Row, Col, InputGroup, FormControl, Button, Form, Pagination, Image, Tabs, Tab, ButtonGroup } from 'react-bootstrap'; // npm install react-bootstrap bootstrap
+import { Row, Col, InputGroup, FormControl, Button, Form, Image, Tabs, Tab, ButtonGroup } from 'react-bootstrap'; // npm install react-bootstrap bootstrap
 import { keys } from '../../key.js'
 import axios from 'axios'
 import { connect } from 'react-redux';
@@ -456,10 +456,10 @@ function Sell(props) {
                                 </Row>
                             </Col>
                             <Col md="2">
-                                <Row>
+                                <Row className="sellRoom-oneLine">
                                     <b>{initRoomVal.title}</b>
                                 </Row>
-                                <Row>
+                                <Row className="sellRoom-oneLine">
                                     {initRoomVal.content}
                                 </Row>
                             </Col>
