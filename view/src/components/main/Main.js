@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom' /* 라우터 초기 설정 */
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { connect } from 'react-redux';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 
 function Main(props) {
@@ -26,6 +28,11 @@ function Main(props) {
         })
     },[])
     
+    const top100Films = [
+        { title: 'The Shawshank Redemption', year: 1994 },
+        { title: 'The Godfather', year: 1972 },
+      ];
+
     return (
         <div>
             <Row className="serach justify-content-md-center align-items-center">
@@ -35,6 +42,13 @@ function Main(props) {
                             <Form.Group as={Col} controlId="idSearchRoom">
                                 <Form.Label className="label-white"><span>どんな部屋をお探しですか？</span></Form.Label>
                                 <Form.Control type="text" placeholder="探す場所を入力して下さい。" />
+                                <Autocomplete
+                                    id="comboAutoMain"
+                                    options={top100Films}
+                                    getOptionLabel={(option) => option.title}
+                                    // style={{ width: 300 }}
+                                    renderInput={(params) => <TextField {...params} label="探す場所を入力して下さい。" variant="outlined" />}
+                                    />
                             </Form.Group>
                         </Form.Row>
                     </Form>
