@@ -33,6 +33,12 @@ function Main(props) {
         { title: 'The Godfather', year: 1972 },
       ];
 
+    const value = [
+        { title: 'The Shawshank Redemption', year: 1994 },
+        { title: 'The Godfather', year: 1972 },
+    ];
+
+
     return (
         <div>
             <Row className="serach justify-content-md-center align-items-center">
@@ -41,13 +47,17 @@ function Main(props) {
                         <Form.Row>
                             <Form.Group as={Col} controlId="idSearchRoom">
                                 <Form.Label className="label-white"><span>どんな部屋をお探しですか？</span></Form.Label>
-                                <Form.Control type="text" placeholder="探す場所を入力して下さい。" />
+                                {/* <Form.Control type="text" placeholder="探す場所を入力して下さい。" /> */}
                                 <Autocomplete
                                     id="comboAutoMain"
+                                    // value={value}
                                     options={top100Films}
                                     getOptionLabel={(option) => option.title}
-                                    // style={{ width: 300 }}
-                                    renderInput={(params) => <TextField {...params} label="探す場所を入力して下さい。" variant="outlined" />}
+                                    renderInput={(params) => <TextField {...params}  variant="outlined" />}
+                                    freeSolo
+                                    onChange={(event, newInputValue) => {
+                                        console.log(newInputValue)
+                                    }}
                                     />
                             </Form.Group>
                         </Form.Row>

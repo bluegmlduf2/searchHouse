@@ -87,3 +87,8 @@
     width: 100%!important;
     background-color: white;
 }
+
+div.MuiFormControl-root{
+    background-color: white;
+    border-radius: 5px;
+}
