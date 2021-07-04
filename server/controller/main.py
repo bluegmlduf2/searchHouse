@@ -30,3 +30,18 @@ def getRooms():
     else:
         return jsonify (data), 200
 
+@main_ab.route('/getInputRooms', methods=['POST'])
+def getInputRooms():
+    '''메인화면에서 검색한 결과 가져오기'''
+    try:
+        if request.method == 'POST':
+            args=request.get_json()
+            data=main.getInputRooms(args)
+    except UserError as e:
+        return json.dumps({'status': False, 'message': e.msg}), 400
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"message": "システムエラー", }), 400
+    else:
+        return jsonify (data), 200
+
